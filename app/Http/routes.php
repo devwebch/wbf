@@ -27,4 +27,8 @@ Route::get('/maps', function () {
     return view('maps');
 });
 
+Route::get('/json', function () {
+    return view('json');
+});
+
 

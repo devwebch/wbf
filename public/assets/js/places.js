@@ -27,7 +27,7 @@ function initialize() {
     // Specify location, radius and place types for your Places API search.
     var request = {
         location: pyrmont,
-        radius: '100',
+        radius: '200',
         types: ['store']
     };
 
@@ -55,7 +55,18 @@ function initialize() {
 
                     var placeInfos = {};
 
-                    service.getDetails({placeId: this.place_id}, function (placeResult, placesServiceStatus) {
+                    infowindow.close();
+                    infowindow  = new google.maps.InfoWindow({
+                        content: '<div id="content">'+
+                            '<h3 id="firstHeading" class="firstHeading">' + this.title + '</h3>'+
+                            '<div id="bodyContent">'+
+                                '<p><a href="#" class="btn btn-primary">Analyze</a></p>'+
+                            '</div>'+
+                        '</div>'
+                    });
+                    infowindow.open(map, this);
+
+                    /*service.getDetails({placeId: this.place_id}, function (placeResult, placesServiceStatus) {
                         if (placesServiceStatus == google.maps.places.PlacesServiceStatus.OK) {
                             placeInfos = placeResult;
 
@@ -80,7 +91,7 @@ function initialize() {
                         } else {
                             console.log('Impossible de récupérer les informations.');
                         }
-                    });
+                    });*/
                 });
             }
         }
@@ -88,4 +99,36 @@ function initialize() {
 }
 
 // Run the initialize function when the window has finished loading.
-google.maps.event.addDomListener(window, 'load', initialize);
+//google.maps.event.addDomListener(window, 'load', initialize);
+
+jQuery(document).ready(function ($) {
+
+    initialize();
+
+    if ($('.json-loader').length) {
+
+        var title = '';
+        var score_speed = '';
+        var score_usability = '';
+        var screenshot = '';
+
+        $.getJSON('assets/score.json', function (data) {
+            console.log(data);
+
+            title = data.title;
+            score_speed = data.ruleGroups.SPEED.score;
+            score_usability = data.ruleGroups.USABILITY.score;
+            screenshot = data.screenshot.data;
+
+            screenshot = screenshot.replace(/_/g, '/');
+            screenshot = screenshot.replace(/-/g, '+');
+
+            $('.json-loader pre').html(data.toJSON);
+            $('.json-result .title').html(title);
+            $('.json-result .score-speed').html(score_speed);
+            $('.json-result .score-usability').html(score_usability);
+            $('.json-result .image').attr('src', 'data:image/jpeg;base64,' + screenshot);
+
+        });
+    }
+});

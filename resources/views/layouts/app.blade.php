@@ -86,6 +86,12 @@
                 <span class="icon-thumbnail "><i class="pg-map"></i></span>
             </li>
             <li class="">
+                <a href="/json">
+                    <span class="title">JSON</span>
+                </a>
+                <span class="icon-thumbnail "><i class="pg-social"></i></span>
+            </li>
+            <li class="">
                 <a href="javascript:;">
                     <span class="title">Page 3</span>
                     <span class=" arrow"></span>
@@ -356,7 +362,7 @@
                 </p>
                 <p class="small no-margin pull-right sm-pull-reset">
                     <a href="#">Powered by</a>
-                    <span class="hint-text">developpeurweb.ch</span>
+                    <span class="hint-text">DevWeb</span>
                 </p>
                 <div class="clearfix"></div>
             </div>
