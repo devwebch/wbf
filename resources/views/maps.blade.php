@@ -19,18 +19,18 @@
                     <div class="panel-title">Google Map</div>
                 </div>
                 <div class="panel-body">
-                    <form role="form" class="m-b-20">
+                    <form role="form" class="wbf-search-form m-b-20">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="inputSearch">Search</label>
-                                    <input type="text" name="inputSearch" id="inputSearch" class="form-control" placeholder="Store name...">
+                                    <label for="wbfInputText">Search</label>
+                                    <input type="text" name="wbfInputText" id="wbfInputText" class="form-control" placeholder="Store name...">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="inputCategory">Category</label>
-                                    <select name="inputCategory" id="inputCategory" class="form-control">
+                                    <label for="wbfInputCategory">Category</label>
+                                    <select name="wbfInputCategory" id="wbfInputCategory" class="form-control">
                                         <option value="accounting">Accounting</option>
                                         <option value="airport">Airport</option>
                                         <option value="art_gallery">Art gallery</option>

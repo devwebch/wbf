@@ -1,40 +1,47 @@
 /**
  * Created by srapin on 30.07.16.
  */
+
+var map             = null;
+var markers         = [];
+var infowindow      = null;
+
+// Specify location, radius and place types for your Places API search.
+var request         = {};
+
+// TODO: Add geocoder : https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
+
 function initialize() {
     var pyrmont = new google.maps.LatLng(46.522386, 6.628718);
 
-    var map = new google.maps.Map(document.getElementById('map'), {
+    request = {
+        location: pyrmont,
+        radius: 100,
+        types: ['store']
+    };
+
+    map = new google.maps.Map(document.getElementById('map'), {
         center: pyrmont,
         zoom: 15,
         scrollwheel: false
     });
 
-    var contentTitle = 'Default title';
+    infowindow  = new google.maps.InfoWindow({ content: '' });
 
-    var infowindow  = new google.maps.InfoWindow({
-        content: '<div id="content">'+
-        '<div id="siteNotice">'+
-        '</div>'+
-        '<h3 id="firstHeading" class="firstHeading">' + contentTitle + '</h3>'+
-        '<div id="bodyContent">'+
-        '<p>Lorem ipsum dolor sit amet.</p>'+
-        '</div>'+
-        '</div>'
+    mapSearch('');
+}
+
+function mapSearch(search)
+{
+    markers.forEach(function (marker) {
+       marker.setMap(null);
     });
-    var service     = new google.maps.places.PlacesService(map);
-
-    // Specify location, radius and place types for your Places API search.
-    var request = {
-        location: pyrmont,
-        radius: '200',
-        types: ['store']
-    };
+    markers = [];
 
     // Create the PlaceService and send the request.
     // Handle the callback with an anonymous function.
     var service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(request, function(results, status) {
+    service.textSearch(request, function(results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
@@ -51,47 +58,47 @@ function initialize() {
                     types: place.types
                 });
 
-                marker.addListener('click', function () {
+                markers.push(marker);
 
-                    var placeInfos = {};
+                marker.addListener('click', function () {
 
                     infowindow.close();
                     infowindow  = new google.maps.InfoWindow({
                         content: '<div id="content">'+
-                            '<h3 id="firstHeading" class="firstHeading">' + this.title + '</h3>'+
-                            '<div id="bodyContent">'+
-                                '<p><a href="#" class="btn btn-primary">Analyze</a></p>'+
-                            '</div>'+
+                        '<h3 id="firstHeading" class="firstHeading">' + this.title + '</h3>'+
+                        '<div id="bodyContent">'+
+                        '<p><a href="#" class="btn btn-primary">Analyze</a></p>'+
+                        '</div>'+
                         '</div>'
                     });
                     infowindow.open(map, this);
 
                     /*service.getDetails({placeId: this.place_id}, function (placeResult, placesServiceStatus) {
-                        if (placesServiceStatus == google.maps.places.PlacesServiceStatus.OK) {
-                            placeInfos = placeResult;
+                     if (placesServiceStatus == google.maps.places.PlacesServiceStatus.OK) {
+                     placeInfos = placeResult;
 
-                            infowindow.close();
-                            infowindow  = new google.maps.InfoWindow({
-                                content: '<div id="content">'+
-                                '<div id="siteNotice">'+
-                                '</div>'+
-                                '<h3 id="firstHeading" class="firstHeading">' + placeInfos.name + '</h3>'+
-                                '<div id="bodyContent">'+
-                                '<p>Place ID : ' + placeInfos.place_id + '</p>'+
-                                '<p>Adresse : ' + placeInfos.formatted_address + '</p>'+
-                                '<p>Phone number : ' + placeInfos.formatted_phone_number + '</p>'+
-                                '<p>Name : ' + placeInfos.name + '</p>'+
-                                '<p>Google Page : ' + placeInfos.url + '</p>'+
-                                '<p>Website : ' + placeInfos.website + '</p>'+
-                                '</div>'+
-                                '</div>'
-                            });
-                            infowindow.open(map, marker);
+                     infowindow.close();
+                     infowindow  = new google.maps.InfoWindow({
+                     content: '<div id="content">'+
+                     '<div id="siteNotice">'+
+                     '</div>'+
+                     '<h3 id="firstHeading" class="firstHeading">' + placeInfos.name + '</h3>'+
+                     '<div id="bodyContent">'+
+                     '<p>Place ID : ' + placeInfos.place_id + '</p>'+
+                     '<p>Adresse : ' + placeInfos.formatted_address + '</p>'+
+                     '<p>Phone number : ' + placeInfos.formatted_phone_number + '</p>'+
+                     '<p>Name : ' + placeInfos.name + '</p>'+
+                     '<p>Google Page : ' + placeInfos.url + '</p>'+
+                     '<p>Website : ' + placeInfos.website + '</p>'+
+                     '</div>'+
+                     '</div>'
+                     });
+                     infowindow.open(map, marker);
 
-                        } else {
-                            console.log('Impossible de récupérer les informations.');
-                        }
-                    });*/
+                     } else {
+                     console.log('Impossible de récupérer les informations.');
+                     }
+                     });*/
                 });
             }
         }
@@ -102,7 +109,7 @@ function initialize() {
 //google.maps.event.addDomListener(window, 'load', initialize);
 
 jQuery(document).ready(function ($) {
-
+    // init the Gmap
     initialize();
 
     if ($('.json-loader').length) {
@@ -131,4 +138,19 @@ jQuery(document).ready(function ($) {
 
         });
     }
+
+    $('.wbf-search-form').submit(function (e) {
+        e.preventDefault();
+
+        var searchText          = $('#wbfInputText').val();
+        var searchCategory      = $('#wbfInputCategory').val();
+
+        if (searchCategory) {
+            request.keyword = searchCategory;
+            request.types   = [searchCategory];
+        }
+
+        mapSearch('');
+    });
+
 });

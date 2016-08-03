@@ -43,7 +43,7 @@
         }
     </script>
 </head>
-<body class="fixed-header menu-pin">
+<body class="fixed-header menu-pind">
 <!-- BEGIN SIDEBAR -->
 <div class="page-sidebar" data-pages="sidebar">
     <div id="appMenu" class="sidebar-overlay-slide from-top">
@@ -331,7 +331,7 @@
                         <!-- START BREADCRUMB -->
                         <ul class="breadcrumb">
                             <li>
-                                <p>Pages</p>
+                                <p>Home</p>
                             </li>
                             <li><a href="#" class="active">Barebone template</a>
                             </li>
