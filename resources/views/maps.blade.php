@@ -19,6 +19,13 @@
                     <div class="panel-title">Google Map</div>
                 </div>
                 <div class="panel-body">
+                    <form class="wbf-location-form m-b-20">
+                        <div class="form-group">
+                            <label for="wbfInputAddress">Address</label>
+                            <input type="text" name="wbfInputAddress" id="wbfInputAddress" class="form-control" placeholder="Address...">
+                        </div>
+                        <button type="submit" class="btn btn-default">Search</button>
+                    </form>
                     <form role="form" class="wbf-search-form m-b-20">
                         <div class="row">
                             <div class="col-md-6">
@@ -31,6 +38,7 @@
                                 <div class="form-group">
                                     <label for="wbfInputCategory">Category</label>
                                     <select name="wbfInputCategory" id="wbfInputCategory" class="form-control">
+                                        <option value="">Select a category...</option>
                                         <option value="accounting">Accounting</option>
                                         <option value="airport">Airport</option>
                                         <option value="art_gallery">Art gallery</option>
