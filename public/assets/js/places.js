@@ -2,11 +2,15 @@
  * Created by srapin on 30.07.16.
  */
 
-var pyrmont         = new google.maps.LatLng(46.522386, 6.628718);
-var service         = null;
-var map             = null;
-var markers         = [];
-var infoWindow      = null;
+var pyrmont                 = new google.maps.LatLng(46.522386, 6.628718);
+var service                 = null;
+var map                     = null;
+var markers                 = [];
+var searchMarkers           = [];
+var overlays                = [];
+var infoWindow              = null;
+
+var allowedSearchMarkers    = 1;
 
 var API_KEY         = 'AIzaSyDCelPpT9KgfceVGY8cBRFc4D-n8rbT9-0';
 var API_PAGESPEED   = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed';
@@ -18,7 +22,7 @@ function initialize() {
     // set the default Map request
     request = {
         location: pyrmont,
-        radius: 300,
+        radius: 100,
         types: ['store']
     };
 
@@ -33,6 +37,15 @@ function initialize() {
     // init the InfoWindow
     infoWindow  = new google.maps.InfoWindow({ content: '' });
 
+    // add search point on click
+    google.maps.event.addListener(map, 'click', function (event) {
+        var position = event.latLng;
+        addSearchMarker(position);
+    });
+
+    addSearchMarker(request.location);
+
+    // try geolocation on the user's browser (https only)
     tryAutoGeoLocation();
 }
 
@@ -49,8 +62,6 @@ function tryAutoGeoLocation()
             infoWindow.setPosition(pos);
             infoWindow.setContent('Location found.');
             map.setCenter(pos);
-
-            console.log(pos);
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
         });
@@ -71,57 +82,117 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 function mapSearch()
 {
     // reset the markers
-    markers.forEach(function (marker) { marker.setMap(null); });
-    markers = [];
+    clearPlaces();
 
     // Create the PlaceService and send the request.
     // Handle the callback with an anonymous function.
     service = new google.maps.places.PlacesService(map);
     service.textSearch(request, function(results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
+            console.log(results);
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
-                // If the request succeeds, draw the places locations on
-                // the map as a marker, and register an event to handle a
-                // click on the marker.
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: place.geometry.location,
-                    title: place.name,
-                    id: place.id,
-                    place_id: place.place_id,
-                    vicinity: place.vicinity,
-                    types: place.types
-                });
-
-                // add the marker for future reinitialisation
-                markers.push(marker);
-
-                // marker click handler
-                marker.addListener('click', function () {
-
-                    // close any existing window and open a new one
-                    infoWindow.close();
-                    infoWindow  = new google.maps.InfoWindow({
-                        content:    '<div id="content">'+
-                                        '<h3 id="firstHeading" class="firstHeading">' + this.title + '</h3>'+
-                                        '<div id="bodyContent">'+
-                                            '<p><a href="#" class="btn btn-primary btn-analyze" data-id="' + this.place_id + '">Analyze</a></p>'+
-                                        '</div>'+
-                                    '</div>'
-                    });
-                    infoWindow.open(map, this);
-
-                    // btn Analyze click handler
-                    $('.btn-analyze').on('click', function (e) {
-                        e.preventDefault();
-                        var placeID = $(this).attr('data-id');
-                        analyze(placeID);
-                    });
-                });
+                addPlaceMarker(place);
             }
+            addSearchMarker(request.location);
+            showRadius(request.location, request.radius);
         }
     });
+}
+
+function addPlaceMarker(place)
+{
+    var marker = new google.maps.Marker({
+        map: map,
+        position: place.geometry.location,
+        title: place.name,
+        id: place.id,
+        place_id: place.place_id,
+        vicinity: place.vicinity,
+        types: place.types,
+        permanently_closed: place.permanently_closed,
+        animation: google.maps.Animation.DROP
+    });
+
+    // add the marker for future reinitialisation
+    markers.push(marker);
+
+    // marker click handler
+    marker.addListener('click', function () {
+
+        // close any existing window and open a new one
+        infoWindow.close();
+        infoWindow  = new google.maps.InfoWindow({
+            content:    '<div id="content">'+
+                            '<h3 id="firstHeading" class="firstHeading">' + place.name + '</h3>'+
+                            '<div id="bodyContent">'+
+                                '<p>' + place.formatted_address + '</p>'+
+                                '<p><a href="#" class="btn btn-primary btn-analyze" data-id="' + this.place_id + '">Analyze</a></p>'+
+                            '</div>'+
+                        '</div>'
+        });
+        infoWindow.open(map, this);
+
+        // btn Analyze click handler
+        $('.btn-analyze').on('click', function (e) {
+            e.preventDefault();
+            var placeID = $(this).attr('data-id');
+            analyze(placeID);
+        });
+    });
+}
+
+function addSearchMarker(position)
+{
+    if (searchMarkers.length) {
+        searchMarkers.forEach(function (marker) {
+            marker.setMap(null);
+        });
+        searchMarkers = [];
+    }
+
+    /*var marker = new google.maps.Marker({
+        map: map,
+        position: position,
+        draggable: true,
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 6
+        }
+    });*/
+
+    // TODO: Map icons : http://map-icons.com/
+
+    var marker = new Marker({
+        map: map,
+        position: position,
+        draggable: true,
+        icon: {
+            path: MAP_PIN,
+            fillColor: '#00CCBB',
+            fillOpacity: 1,
+            strokeColor: '',
+            strokeWeight: 0
+        },
+        map_icon_label: '<span class="map-icon map-icon-map-pin"></span>'
+    });
+
+    marker.addListener('dragstart', function () {
+        hideRadius();
+        clearPlaces();
+    });
+    marker.addListener('dragend', function () {
+        showRadius(marker.position, request.radius);
+        request.location = marker.position;
+        map.setCenter(marker.position);
+    });
+
+    searchMarkers.push(marker);
+
+    map.setCenter(marker.position);
+    request.location = marker.position;
+
+    showRadius(marker.position, request.radius);
 }
 
 function analyze(placeID)
@@ -197,10 +268,11 @@ function geoCodeAddress(address)
             if ( status === google.maps.GeocoderStatus.OK ) {
 
                 var location            = results[0].geometry.location;
-                var formatted_address       = results[0].formatted_address;
+                var formatted_address   = results[0].formatted_address;
 
                 map.setCenter(location);
                 request.location = location;
+                addSearchMarker(location);
 
                 $('#wbfInputAddress').val(formatted_address);
             } else {
@@ -210,8 +282,48 @@ function geoCodeAddress(address)
     }
 }
 
-// Run the initialize function when the window has finished loading.
-//google.maps.event.addDomListener(window, 'load', initialize);
+function showRadius(position, radius)
+{
+    if (overlays.length) {
+        overlays.forEach(function (overlay) {
+            overlay.setMap(null);
+        });
+        overlays = [];
+    }
+
+    var circleOverlay = new google.maps.Circle({
+        strokeColor: '#0784bd',
+        strokeOpacity: 0,
+        strokeWeight: 1,
+        fillColor: '#00afff',
+        fillOpacity: 0.15,
+        map: map,
+        center: position,
+        clickable: false,
+        radius: radius * 1.5
+    });
+
+    overlays.push(circleOverlay);
+}
+
+function hideRadius()
+{
+    if (overlays.length) {
+        overlays.forEach(function (overlay) {
+            overlay.setMap(null);
+        });
+        overlays = [];
+    }
+}
+
+function clearPlaces()
+{
+    // reset the markers
+    if (markers.length) {
+        markers.forEach(function (marker) { marker.setMap(null); });
+        markers = [];
+    }
+}
 
 jQuery(document).ready(function ($) {
     // init the Gmap
@@ -226,9 +338,17 @@ jQuery(document).ready(function ($) {
 
         if ( searchText ) { request.query = searchText; } else { request.query = ''; }
         if ( searchCategory ) { request.types = [searchCategory]; } else { request.types = []; }
-        if ( searchRadius ) { request.radius = searchRadius; } else { request.radius = 100; }
+        if ( searchRadius ) { request.radius = parseInt(searchRadius); } else { request.radius = 100; }
 
         mapSearch();
+    });
+
+    $('#wbfInputRadius').change(function (e) {
+
+        var radius = (parseInt($(this).val()));
+
+        request.radius = radius;
+        showRadius(request.location, radius);
     });
 
     $('.wbf-location-form').submit(function (e) {
