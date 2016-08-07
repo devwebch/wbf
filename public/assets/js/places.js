@@ -2,13 +2,17 @@
  * Created by srapin on 30.07.16.
  */
 
-var pyrmont         = new google.maps.LatLng(46.522386, 6.628718);
-var service         = null;
-var map             = null;
-var markers         = [];
-var infoWindow      = null;
+var pyrmont                 = new google.maps.LatLng(46.522386, 6.628718);
+var service                 = null;
+var map                     = null;
+var markers                 = [];
+var searchMarkers           = [];
+var overlays                = [];
+var infoWindow              = null;
 
-var API_KEY         = 'AIzaSyDCelPpT9KgfceVGY8cBRFc4D-n8rbT9-0';
+var allowedSearchMarkers    = 1;
+
+var API_KEY         = 'AIzaSyAmuoso1k61TZCOqUdPi3E7VIl2HA2UBmA';
 var API_PAGESPEED   = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed';
 
 // Specify location, radius and place types for your Places API search.
@@ -33,6 +37,15 @@ function initialize() {
     // init the InfoWindow
     infoWindow  = new google.maps.InfoWindow({ content: '' });
 
+    // add search point on click
+    google.maps.event.addListener(map, 'click', function (event) {
+        var position = event.latLng;
+        addSearchMarker(position);
+    });
+
+    addSearchMarker(request.location);
+
+    // try geolocation on the user's browser (https only)
     tryAutoGeoLocation();
 }
 
@@ -49,8 +62,6 @@ function tryAutoGeoLocation()
             infoWindow.setPosition(pos);
             infoWindow.setContent('Location found.');
             map.setCenter(pos);
-
-            console.log(pos);
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
         });
@@ -71,8 +82,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 function mapSearch()
 {
     // reset the markers
-    markers.forEach(function (marker) { marker.setMap(null); });
-    markers = [];
+    clearPlaces();
 
     // Create the PlaceService and send the request.
     // Handle the callback with an anonymous function.
@@ -81,47 +91,100 @@ function mapSearch()
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
-                // If the request succeeds, draw the places locations on
-                // the map as a marker, and register an event to handle a
-                // click on the marker.
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: place.geometry.location,
-                    title: place.name,
-                    id: place.id,
-                    place_id: place.place_id,
-                    vicinity: place.vicinity,
-                    types: place.types
-                });
-
-                // add the marker for future reinitialisation
-                markers.push(marker);
-
-                // marker click handler
-                marker.addListener('click', function () {
-
-                    // close any existing window and open a new one
-                    infoWindow.close();
-                    infoWindow  = new google.maps.InfoWindow({
-                        content:    '<div id="content">'+
-                                        '<h3 id="firstHeading" class="firstHeading">' + this.title + '</h3>'+
-                                        '<div id="bodyContent">'+
-                                            '<p><a href="#" class="btn btn-primary btn-analyze" data-id="' + this.place_id + '">Analyze</a></p>'+
-                                        '</div>'+
-                                    '</div>'
-                    });
-                    infoWindow.open(map, this);
-
-                    // btn Analyze click handler
-                    $('.btn-analyze').on('click', function (e) {
-                        e.preventDefault();
-                        var placeID = $(this).attr('data-id');
-                        analyze(placeID);
-                    });
-                });
+                addPlaceMarker(place);
             }
+            addSearchMarker(request.location);
+            showRadius(request.location, request.radius);
         }
     });
+}
+
+function addPlaceMarker(place)
+{
+    var marker = new Marker({
+        map: map,
+        position: place.geometry.location,
+        title: place.name,
+        id: place.id,
+        place_id: place.place_id,
+        vicinity: place.vicinity,
+        types: place.types,
+        permanently_closed: place.permanently_closed,
+        icon: {
+            url: 'assets/img/icn_pin_blue.png',
+            size: new google.maps.Size(24, 30),
+            origin: new google.maps.Point(0,0),
+            anchor: new google.maps.Point(10, 25)
+        }
+    });
+
+    // add the marker for future reinitialisation
+    markers.push(marker);
+
+    // marker click handler
+    marker.addListener('click', function () {
+
+        // close any existing window and open a new one
+        infoWindow.close();
+        infoWindow  = new google.maps.InfoWindow({
+            content:    '<div id="content">'+
+                            '<h3 id="firstHeading" class="firstHeading">' + place.name + '</h3>'+
+                            '<div id="bodyContent">'+
+                                '<p>' + place.formatted_address + '</p>'+
+                                '<p><a href="#" class="btn btn-primary btn-analyze" data-id="' + this.place_id + '">Analyze</a></p>'+
+                            '</div>'+
+                        '</div>'
+        });
+        infoWindow.open(map, this);
+
+        // btn Analyze click handler
+        $('.btn-analyze').on('click', function (e) {
+            e.preventDefault();
+            var placeID = $(this).attr('data-id');
+            analyze(placeID);
+        });
+    });
+}
+
+function addSearchMarker(position)
+{
+    if (searchMarkers.length) {
+        searchMarkers.forEach(function (marker) {
+            marker.setMap(null);
+        });
+        searchMarkers = [];
+    }
+
+    var marker = new google.maps.Marker({
+        map: map,
+        position: position,
+        draggable: true,
+        icon: {
+            url: 'assets/img/icn_pin_red.png',
+            size: new google.maps.Size(24, 30),
+            origin: new google.maps.Point(0,0),
+            anchor: new google.maps.Point(10, 25)
+        }
+    });
+
+    // TODO: Map icons : http://map-icons.com/
+
+    marker.addListener('dragstart', function () {
+        hideRadius();
+        clearPlaces();
+    });
+    marker.addListener('dragend', function () {
+        showRadius(marker.position, request.radius);
+        request.location = marker.position;
+        map.setCenter(marker.position);
+    });
+
+    searchMarkers.push(marker);
+
+    map.setCenter(marker.position);
+    request.location = marker.position;
+
+    showRadius(marker.position, request.radius);
 }
 
 function analyze(placeID)
@@ -136,6 +199,7 @@ function analyze(placeID)
 
     $('.wbf-business-details').addClass('hidden');
     $('.wbf-business-details-progress').removeClass('hidden');
+    $('.wbf-business-details-introduction').addClass('hidden');
 
     service.getDetails({placeId: placeID}, function (placeResult, placesServiceStatus) {
         if (placesServiceStatus == google.maps.places.PlacesServiceStatus.OK) {
@@ -152,11 +216,23 @@ function analyze(placeID)
 
             var API_URL = API_PAGESPEED + '?url=' + place_website_encoded + '&screenshot=true&strategy=mobile&key=' + API_KEY;
 
+            // TODO: hide & show logic
+
+            // hide results sections
+            $('.wbf-business-details-progress').removeClass('hidden');
+            $('.wbf-business-details').addClass('hidden');
+            $('.wbf-business-details__title').addClass('hidden');
+            $('.wbf-business-details__pagespeed').addClass('hidden');
+            $('.wbf-business-details__preview').addClass('hidden');
+            $('.wbf-business-details__indicators').addClass('hidden');
+            $('.wbf-business-details__title').addClass('hidden');
+
+
             if (place_website) {
-                var title = '';
-                var score_speed = '';
-                var score_usability = '';
-                var screenshot = '';
+                var title               = '';
+                var score_speed         = '';
+                var score_usability     = '';
+                var screenshot          = '';
 
                 $.getJSON(API_URL, function (data) {
                     title               = data.title;
@@ -167,19 +243,46 @@ function analyze(placeID)
                     screenshot = screenshot.replace(/_/g, '/');
                     screenshot = screenshot.replace(/-/g, '+');
                 }).complete(function () {
-                    console.log('json load done');
-
-                    $('.wbf-business-details .title').html(title);
-                    $('.wbf-business-details .score-speed').html(score_speed);
-                    $('.wbf-business-details .score-usability').html(score_usability);
-                    $('.wbf-business-details .image').attr('src', 'data:image/jpeg;base64,' + screenshot);
-
-                    $('.wbf-business-details').removeClass('hidden');
+                    // hide progress indicator
                     $('.wbf-business-details-progress').addClass('hidden');
+                    $('.wbf-business-details').removeClass('hidden');
+
+                    // details: title
+                    if (title) {
+                        $('.wbf-business-details__title').removeClass('hidden');
+                        $('.wbf-business-details__title .title').html(title);
+                        $('.wbf-business-details__title .address').html(place_formatted_address);
+                        $('.wbf-business-details__title .website').html(place_website);
+                        $('.wbf-business-details__title .website').attr('href', place_website);
+                    }
+
+                    // details: pagespeed
+                    if (score_speed) {
+                        $('.wbf-business-details__pagespeed').removeClass('hidden');
+                        $('.wbf-business-details__pagespeed .score-speed').html(score_speed);
+                        $('.wbf-business-details__pagespeed .score-usability').html(score_usability);
+                    }
+
+                    // details: preview
+                    if (screenshot) {
+                        $('.wbf-business-details__preview').removeClass('hidden');
+                        $('.wbf-business-details__preview .image').attr('src', 'data:image/jpeg;base64,' + screenshot);
+                    }
+
+                    // details: indicators
+                    $('.wbf-business-details__indicators .indicator-website').html('yes');
+                    $('.wbf-business-details__indicators .indicator-opening-hours').html('found');
+                    $('.wbf-business-details__indicators .indicator-rating').html('5/5');
+                    $('.wbf-business-details__indicators .indicator-closed').html('no');
+
+                    $('.wbf-business-details__add-to-list').removeClass('hidden');
                 });
             } else {
-                console.log('no website');
+                // hide progress indicator
                 $('.wbf-business-details-progress').addClass('hidden');
+
+                // hide pagespeed results
+                $('.wbf-business-details__pagespeed').addClass('hidden');
             }
 
         } else {
@@ -197,10 +300,11 @@ function geoCodeAddress(address)
             if ( status === google.maps.GeocoderStatus.OK ) {
 
                 var location            = results[0].geometry.location;
-                var formatted_address       = results[0].formatted_address;
+                var formatted_address   = results[0].formatted_address;
 
                 map.setCenter(location);
                 request.location = location;
+                addSearchMarker(location);
 
                 $('#wbfInputAddress').val(formatted_address);
             } else {
@@ -210,8 +314,48 @@ function geoCodeAddress(address)
     }
 }
 
-// Run the initialize function when the window has finished loading.
-//google.maps.event.addDomListener(window, 'load', initialize);
+function showRadius(position, radius)
+{
+    if (overlays.length) {
+        overlays.forEach(function (overlay) {
+            overlay.setMap(null);
+        });
+        overlays = [];
+    }
+
+    var circleOverlay = new google.maps.Circle({
+        strokeColor: '#0784bd',
+        strokeOpacity: 0,
+        strokeWeight: 1,
+        fillColor: '#00afff',
+        fillOpacity: 0.15,
+        map: map,
+        center: position,
+        clickable: false,
+        radius: radius * 1.5
+    });
+
+    overlays.push(circleOverlay);
+}
+
+function hideRadius()
+{
+    if (overlays.length) {
+        overlays.forEach(function (overlay) {
+            overlay.setMap(null);
+        });
+        overlays = [];
+    }
+}
+
+function clearPlaces()
+{
+    // reset the markers
+    if (markers.length) {
+        markers.forEach(function (marker) { marker.setMap(null); });
+        markers = [];
+    }
+}
 
 jQuery(document).ready(function ($) {
     // init the Gmap
@@ -226,9 +370,17 @@ jQuery(document).ready(function ($) {
 
         if ( searchText ) { request.query = searchText; } else { request.query = ''; }
         if ( searchCategory ) { request.types = [searchCategory]; } else { request.types = []; }
-        if ( searchRadius ) { request.radius = searchRadius; } else { request.radius = 100; }
+        if ( searchRadius ) { request.radius = parseInt(searchRadius); } else { request.radius = 100; }
 
         mapSearch();
+    });
+
+    $('#wbfInputRadius').change(function (e) {
+
+        var radius = (parseInt($(this).val()));
+
+        request.radius = radius;
+        showRadius(request.location, radius);
     });
 
     $('.wbf-location-form').submit(function (e) {

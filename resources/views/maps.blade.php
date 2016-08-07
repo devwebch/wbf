@@ -4,26 +4,31 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{asset('assets/plugins/bootstrap-select2/select2.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/map-icons.css')}}">
 @endsection
 
 @section('scripts')
     <script src="{{asset('assets/plugins/bootstrap-select2/select2.min.js')}}"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCelPpT9KgfceVGY8cBRFc4D-n8rbT9-0&libraries=places"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmuoso1k61TZCOqUdPi3E7VIl2HA2UBmA&libraries=places"></script>
+    <script src="{{asset('assets/js/map-icons.js')}}"></script>
     <script src="{{asset('assets/js/places.js')}}"></script>
 @endsection
 
 @section('content')
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="panel">
+                <div class="panel-heading">
+                    <div class="panel-title">Search location</div>
+                </div>
                 <div class="panel-body">
                     <form class="wbf-location-form form-inline">
                         <div class="form-group">
                             <label for="wbfInputAddress" class="sr-only">Address</label>
                             <input type="text" name="wbfInputAddress" id="wbfInputAddress" class="form-control" placeholder="Address...">
                         </div>
-                        <button type="submit" class="btn btn-default">Search address</button>
+                        <button type="submit" class="btn btn-warning">Search address</button>
                     </form>
                 </div>
             </div>
@@ -40,7 +45,7 @@
                                     <input type="text" name="wbfInputText" id="wbfInputText" class="form-control" placeholder="Store name...">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="wbfInputCategory">Category</label>
                                     <select name="wbfInputCategory" id="wbfInputCategory" class="full-width"  data-init-plugin="select2">
@@ -117,43 +122,100 @@
                                     <label for="wbfInputRadius">Radius</label>
                                     <select name="wbfInputRadius" id="wbfInputRadius" class="form-control">
                                         <option value="50">50m</option>
-                                        <option value="100" selected>100m</option>
+                                        <option value="100">100m</option>
                                         <option value="150">150m</option>
                                         <option value="200">200m</option>
-                                        <option value="300">300m</option>
+                                        <option value="300" selected>300m</option>
                                         <option value="400">400m</option>
                                         <option value="500">500m</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-default">Search</button>
+                        <button type="submit" class="btn btn-success">Search</button>
                     </form>
                     <div class="map-container">
-                        <div id="map" style="height: 400px"></div>
+                        <div id="map" style="height: 500px"></div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="panel">
                 <div class="panel-heading">
                     <div class="panel-title"><i class="pg-map"></i> Business details</div>
                 </div>
                 <div class="panel-body">
-                    <div class="progress wbf-business-details-progress hidden">
-                        <div class="progress-bar-indeterminate"></div>
+                    <div class="wbf-business-details-introduction">
+                        <h3>Hi there!</h3>
+                        <p>Please search for a business and click analyze to get informations, lorem ipsum.</p>
                     </div>
-                    <div class="wbf-business-details hidden">
-                        <h4 class="title"></h4>
-                        <h4><i class="fa fa-bar-chart-o"></i> Pagespeed scores</h4>
-                        <ul class="list-unstyled">
-                            <li>Speed : <span class="score-speed"></span></li>
-                            <li>Usability : <span class="score-usability"></span></li>
-                        </ul>
-                        <h4><i class="fa fa-mobile-phone"></i> Responsive Screenshot</h4>
-                        <img class="image" src="" alt="">
+                    <div class="wbf-business-details-progress hidden" style="text-align: center; padding: 40px 0;">
+                        <div class="progress-circle-indeterminate"></div>
+                        <p class="small hint-text">Loading</p>
                     </div>
+
+                    <div class="wbf-business-details">
+                        <div class="wbf-business-details__title hidden">
+                            <h3 class="title">Titre du site</h3>
+                            <p class="address">Rue du Port-Franc 16, 1003 Lausanne, Suisse</p>
+                            <p><a href="#" class="website" target="_blank">http://www.example.com</a> <i class="fa fa-external-link"></i></p>
+                            <hr>
+                        </div>
+                        <div class="wbf-business-details__pagespeed hidden">
+                            <h4>Pagespeed scores</h4>
+                            <table class="table table-condensed">
+                                <thead>
+                                <tr>
+                                    <th>Speed</th>
+                                    <th>Usability</th>
+                                </tr>
+                                </thead>
+                                <tr>
+                                    <td><span class="score-speed label label-info">99</span><span> / 100</span></td>
+                                    <td><span class="score-usability label label-info">87</span><span> / 100</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="wbf-business-details__preview hidden m-b-20">
+                            <h4>Mobile preview</h4>
+                            <div style="text-align: center;">
+                                <img class="image" src="{{asset('assets/img/filelink.png')}}" alt="">
+                            </div>
+                        </div>
+                        <div class="wbf-business-details__indicators hidden">
+                            <h4>Obsolescence indicators</h4>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Variable</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tr class="website">
+                                    <td><strong>Website</strong></td>
+                                    <td><span class="label label-success indicator-website">Yes</span></td>
+                                </tr>
+                                <tr class="opening_hours">
+                                    <td><strong>Opening hours</strong></td>
+                                    <td><span class="label label-danger indicator-opening-hours">Not found</span></td>
+                                </tr>
+                                <tr class="rating">
+                                    <td><strong>Rating</strong></td>
+                                    <td><span class="label label-info indicator-rating">3 / 5</span></td>
+                                </tr>
+                                <tr class="closed">
+                                    <td><strong>Closed (permanent)</strong></td>
+                                    <td><span class="label label-danger indicator-closed">yes</span></td>
+                                </tr>
+                            </table>
+                            <hr>
+                        </div>
+                        <div class="wbf-business-details__add-to-list hidden">
+                            <button class="btn btn-complete btn-lg btn-block">Add to my list</button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
