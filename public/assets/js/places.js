@@ -227,7 +227,6 @@ function analyze(placeID)
             $('.wbf-business-details__indicators').addClass('hidden');
             $('.wbf-business-details__title').addClass('hidden');
 
-
             if (place_website) {
                 var title               = '';
                 var score_speed         = '';

@@ -31,6 +31,7 @@
     <!-- BEGIN Pages CSS-->
     <link href="{{asset('pages/css/pages-icons.css')}}" rel="stylesheet" type="text/css">
     <link class="main-stylesheet" href="{{asset('pages/css/pages.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/css/style.css')}}" rel="stylesheet" type="text/css" />
     <!--[if lte IE 9]>
     <link href="{{asset('pages/css/ie9.css')}}" rel="stylesheet" type="text/css" />
     <![endif]-->
