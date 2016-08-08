@@ -31,4 +31,7 @@ Route::get('/json', function () {
     return view('json');
 });
 
-
+Route::group(['prefix' => 'leads'], function (){
+    Route::get('list', 'LeadController@getLeads');
+    Route::get('insert', 'LeadController@insertLead');
+});

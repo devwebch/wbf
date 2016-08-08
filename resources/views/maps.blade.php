@@ -150,16 +150,11 @@
                         <h3>Hi there!</h3>
                         <p>Please search for a business and click analyze to get informations, lorem ipsum.</p>
                     </div>
-                    <div class="wbf-business-details-progress hidden" style="text-align: center; padding: 40px 0;">
-                        <div class="progress-circle-indeterminate"></div>
-                        <p class="small hint-text">Loading</p>
-                    </div>
-
                     <div class="wbf-business-details">
                         <div class="wbf-business-details__title hidden">
                             <h3 class="title">Titre du site</h3>
                             <p class="address">Rue du Port-Franc 16, 1003 Lausanne, Suisse</p>
-                            <p><a href="#" class="website" target="_blank">http://www.example.com</a> <i class="fa fa-external-link"></i></p>
+                            <p><a href="#" class="website hidden" target="_blank">http://www.example.com</a> <i class="fa fa-external-link"></i></p>
                             <hr>
                         </div>
                         <div class="wbf-business-details__pagespeed hidden">
@@ -214,6 +209,11 @@
                         <div class="wbf-business-details__add-to-list hidden">
                             <button class="btn btn-complete btn-lg btn-block">Add to my list</button>
                         </div>
+                    </div>
+
+                    <div class="wbf-business-details-progress hidden" style="text-align: center; padding: 40px 0;">
+                        <div class="progress-circle-indeterminate"></div>
+                        <p class="small hint-text">Loading</p>
                     </div>
 
                 </div>

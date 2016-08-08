@@ -227,14 +227,15 @@ function analyze(placeID)
             $('.wbf-business-details__indicators').addClass('hidden');
             $('.wbf-business-details__title').addClass('hidden');
 
+            // show the details panel
+            $('.wbf-business-details').removeClass('hidden');
+
             if (place_website) {
-                var title               = '';
                 var score_speed         = '';
                 var score_usability     = '';
                 var screenshot          = '';
 
                 $.getJSON(API_URL, function (data) {
-                    title               = data.title;
                     score_speed         = data.ruleGroups.SPEED.score;
                     score_usability     = data.ruleGroups.USABILITY.score;
                     screenshot          = data.screenshot.data;
@@ -244,16 +245,6 @@ function analyze(placeID)
                 }).complete(function () {
                     // hide progress indicator
                     $('.wbf-business-details-progress').addClass('hidden');
-                    $('.wbf-business-details').removeClass('hidden');
-
-                    // details: title
-                    if (title) {
-                        $('.wbf-business-details__title').removeClass('hidden');
-                        $('.wbf-business-details__title .title').html(title);
-                        $('.wbf-business-details__title .address').html(place_formatted_address);
-                        $('.wbf-business-details__title .website').html(place_website);
-                        $('.wbf-business-details__title .website').attr('href', place_website);
-                    }
 
                     // details: pagespeed
                     if (score_speed) {
@@ -287,6 +278,21 @@ function analyze(placeID)
         } else {
             console.log('Impossible de récupérer les informations.');
         }
+
+        // details: title
+        if (place_name) {
+            $('.wbf-business-details__title').removeClass('hidden');
+            $('.wbf-business-details__title .title').html(place_name);
+            $('.wbf-business-details__title .address').html(place_formatted_address);
+            $('.wbf-business-details__title .website').html(place_website);
+            $('.wbf-business-details__title .website').attr('href', place_website);
+        }
+
+        if (place_website) {
+            $('.wbf-business-details__title .website').removeClass('hidden');
+        }
+
+
     });
 }
 
