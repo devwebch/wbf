@@ -18,18 +18,49 @@ class LeadController extends Controller
 
     public function getLeads()
     {
-        return view('leads.list');
+        // retrieve all entries
+        $leads  = Lead::all();
+
+        return view('leads.list', ['leads' => $leads]);
     }
 
-    public function insertLead(Request $request)
+    public function newLead(Request $request)
     {
-        $lead = new Lead();
-        $lead->name     = 'Galerie Alice Pauli';
-        $lead->address  = 'Rue du Port-Franc 9, 1003 Lausanne';
-        $lead->url      = 'galeriealicepauli.ch';
-        $lead->lat      = 46.521276;
-        $lead->lng      = 6.6286718;
+        return view('leads.new');
+    }
 
+    public function storeLead(Request $request)
+    {
+        // set validation rules
+        $this->validate($request, [
+            'leadName'      => 'required',
+            'leadAddress'   => 'required',
+            'leadUrl'       => 'required|url',
+            'leadLat'       => 'required|numeric',
+            'leadLng'       => 'required|numeric'
+        ]);
+
+
+        // create a new Lead model
+        $lead   = new Lead;
+        $lead->name        = $request->leadName;
+        $lead->address     = $request->leadAddress;
+        $lead->url         = $request->leadUrl;
+        $lead->lat         = $request->leadLat;
+        $lead->lng         = $request->leadLng;
+
+        // insert the model in DB
         $lead->save();
+
+        // redirect to Leads list
+        return redirect('leads/list');
+    }
+
+    public function deleteLead($id)
+    {
+        $lead   = Lead::find($id);
+        $lead->delete();
+
+        return redirect('leads/list');
     }
 }

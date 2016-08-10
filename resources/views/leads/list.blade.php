@@ -19,26 +19,22 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Label 1</th>
-                    <th>Label 2</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>URL</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Lorem ipsum</td>
-                    <td>Dolor sit amet</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Lorem ipsum</td>
-                    <td>Dolor sit amet</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Lorem ipsum</td>
-                    <td>Dolor sit amet</td>
-                </tr>
+                    @foreach($leads as $lead)
+                    <tr>
+                        <td>{{$lead->id}}</td>
+                        <td>{{$lead->name}}</td>
+                        <td>{{$lead->address}}</td>
+                        <td>{{$lead->url}}</td>
+                        <td><a href="/leads/delete/{{$lead->id}}"><i class="fa fa-times text-danger"></i></a></td>
+                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

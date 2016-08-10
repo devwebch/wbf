@@ -94,6 +94,23 @@
             </li>
             <li class="">
                 <a href="javascript:;">
+                    <span class="title">Leads</span>
+                    <span class=" arrow"></span>
+                </a>
+                <span class="icon-thumbnail"><i class="pg-grid"></i></span>
+                <ul class="sub-menu">
+                    <li class="">
+                        <a href="/leads/list">List</a>
+                        <span class="icon-thumbnail">li</span>
+                    </li>
+                    <li class="">
+                        <a href="/leads/new">New lead</a>
+                        <span class="icon-thumbnail">nl</span>
+                    </li>
+                </ul>
+            </li>
+            <li class="">
+                <a href="javascript:;">
                     <span class="title">Page 3</span>
                     <span class=" arrow"></span>
                 </a>

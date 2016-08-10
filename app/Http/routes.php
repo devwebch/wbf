@@ -33,5 +33,7 @@ Route::get('/json', function () {
 
 Route::group(['prefix' => 'leads'], function (){
     Route::get('list', 'LeadController@getLeads');
-    Route::get('insert', 'LeadController@insertLead');
+    Route::get('new', 'LeadController@newLead');
+    Route::post('new/store', 'LeadController@storeLead');
+    Route::get('delete/{id}', 'LeadController@deleteLead');
 });
