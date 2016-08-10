@@ -31,7 +31,13 @@
                         <td>{{$lead->id}}</td>
                         <td>{{$lead->name}}</td>
                         <td>{{$lead->address}}</td>
-                        <td>{{$lead->url}}</td>
+                        <td>
+                            @if($lead->url)
+                                <a href="{{$lead->url}}" target="_blank">{{$lead->url}}</a>
+                            @else
+                                None
+                            @endif
+                        </td>
                         <td><a href="/leads/delete/{{$lead->id}}"><i class="fa fa-times text-danger"></i></a></td>
                     </tr>
                     @endforeach

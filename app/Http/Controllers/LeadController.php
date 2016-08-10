@@ -62,11 +62,9 @@ class LeadController extends Controller
         return redirect('leads/list');
     }
 
-    public function deleteLead($id)
+    public function deleteLead(Lead $lead)
     {
-        $lead   = Lead::find($id);
         $lead->delete();
-
         return redirect('leads/list');
     }
 }
