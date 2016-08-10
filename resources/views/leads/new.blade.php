@@ -3,9 +3,12 @@
 @section('title', 'List of leads')
 
 @section('styles')
+    <link rel="stylesheet" href="{{asset('assets/plugins/summernote/css/summernote.css')}}">
 @endsection
 
 @section('scripts')
+    <script src="{{asset('assets/plugins/summernote/js/summernote.min.js')}}"></script>
+    <script src="{{asset('assets/js/widgets.js')}}"></script>
 @endsection
 
 @section('content')
@@ -43,6 +46,24 @@
                         <div class="form-group">
                             <label for="leadLng">Longitude:</label>
                             <input type="text" class="form-control" name="leadLng" id="leadLng" value="6.6287104">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="leadNotes">Notes:</label>
+                            <textarea name="leadNotes" id="leadNotes" class="form-control" cols="30" rows="10"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="leadStatus">Status:</label>
+                            <select name="leadStatus" id="leadStatus" class="form-control">
+                                <option value="0">Status 0</option>
+                                <option value="1">Status 1</option>
+                                <option value="2">Status 2</option>
+                            </select>
                         </div>
                     </div>
                 </div>
