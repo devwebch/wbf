@@ -11,13 +11,13 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', ['middleware' => 'auth', function () {
     return view('home');
-});
+}]);
 
-Route::get('/table', function () {
+Route::get('/table', ['middleware' => 'auth', function () {
     return view('table');
-});
+}]);
 
 Route::get('/form', function () {
     return view('form');
@@ -27,13 +27,10 @@ Route::get('/maps', function () {
     return view('maps');
 });
 
-Route::get('/json', function () {
-    return view('json');
-});
-
 Route::group(['prefix' => 'leads'], function (){
     Route::get('list', 'LeadController@getLeads');
     Route::get('new', 'LeadController@newLead');
     Route::post('new/store', 'LeadController@storeLead');
     Route::get('delete/{id}', 'LeadController@deleteLead');
 });
+Route::auth();

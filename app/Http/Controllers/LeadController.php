@@ -16,6 +16,12 @@ use Illuminate\View\View;
 class LeadController extends Controller
 {
 
+    public function __construct()
+    {
+        // require authentication for the whole Controller
+        $this->middleware('auth');
+    }
+
     public function getLeads()
     {
         // retrieve all entries
