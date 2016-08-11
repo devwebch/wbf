@@ -15,7 +15,6 @@
             <div class="panel-title">Table</div>
         </div>
         <div class="panel-body">
-            <?php echo date('Y-m-d H:i:s'); ?>
             <table class="table">
                 <thead>
                 <tr>
