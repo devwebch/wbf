@@ -32,7 +32,14 @@ class LeadController extends Controller
 
     public function newLead(Request $request)
     {
-        return view('leads.new');
+        $lead = new Lead();
+        return view('leads.form', ['lead' => $lead]);
+    }
+
+    public function editLead(Lead $lead, Request $request)
+    {
+        $request->request->add(['leadID' => $lead->id]);
+        return view('leads.form', ['lead' => $lead, 'submit_label' => 'Save']);
     }
 
     public function storeLead(Request $request)
@@ -46,14 +53,20 @@ class LeadController extends Controller
             'leadLng'       => 'required|numeric'
         ]);
 
+        // if it is an update, we retrieve the Lead object
+        if ($request->_id) {
+            $lead = Lead::find($request->_id);
+        } else {
+            $lead   = new Lead;
+        }
 
-        // create a new Lead model
-        $lead   = new Lead;
+        // set the model value
         $lead->name        = $request->leadName;
         $lead->address     = $request->leadAddress;
         $lead->url         = $request->leadUrl;
         $lead->lat         = $request->leadLat;
         $lead->lng         = $request->leadLng;
+
 
         // insert the model in DB
         $lead->save();

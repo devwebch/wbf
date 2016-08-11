@@ -15,6 +15,7 @@
             <div class="panel-title">Table</div>
         </div>
         <div class="panel-body">
+            <?php echo date('Y-m-d H:i:s'); ?>
             <table class="table">
                 <thead>
                 <tr>
@@ -38,7 +39,10 @@
                                 None
                             @endif
                         </td>
-                        <td><a href="/leads/delete/{{$lead->id}}"><i class="fa fa-times text-danger"></i></a></td>
+                        <td>
+                            <a href="/leads/edit/{{$lead->id}}"><i class="fa fa-pencil text-info"></i></a>&nbsp;
+                            <a href="/leads/delete/{{$lead->id}}"><i class="fa fa-times text-danger"></i></a>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
