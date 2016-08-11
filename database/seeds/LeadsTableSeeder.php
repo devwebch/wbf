@@ -14,11 +14,14 @@ class LeadsTableSeeder extends Seeder
         for ($i = 0; $i < 10; $i++) {
             DB::table('leads')->insert(
                 [
-                    'name'      => 'Shop ' . str_random(5),
-                    'url'       => 'http://example.com',
-                    'address'   => 'Rue de Genève 7, 1003 Lausanne',
-                    'lat'       => 46.5215533,
-                    'lng'       => 6.6287104
+                    'name'          => 'Shop ' . str_random(5),
+                    'url'           => 'http://example.com',
+                    'address'       => 'Rue de Genève 7, 1003 Lausanne',
+                    'lat'           => 46.5215533,
+                    'lng'           => 6.6287104,
+                    'user_id'       => 0,
+                    'created_at'    => date('Y-m-d H:i:s'),
+                    'updated_at'    => date('Y-m-d H:i:s')
                 ]
             );
         }
