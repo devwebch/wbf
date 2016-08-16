@@ -28,6 +28,9 @@
                             <label for="wbfInputAddress" class="sr-only">Address</label>
                             <input type="text" name="wbfInputAddress" id="wbfInputAddress" class="form-control" placeholder="Address...">
                         </div>
+                        <div class="form-group">
+                            <button class="btn btn-default" id="wbfInputGeolocation"><i class="fa fa-crosshairs"></i></button>
+                        </div>
                         <button type="submit" class="btn btn-warning">Search address</button>
                     </form>
                 </div>

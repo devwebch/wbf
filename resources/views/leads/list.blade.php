@@ -22,7 +22,7 @@
                     <th>Name</th>
                     <th>Address</th>
                     <th>URL</th>
-                    <th>Actions</th>
+                    <th width="80"></th>
                 </tr>
                 </thead>
                 <tbody>

@@ -3,18 +3,18 @@
  */
 
 (function () {
-    var API_KEY         = 'AIzaSyAmuoso1k61TZCOqUdPi3E7VIl2HA2UBmA';
-    var API_PAGESPEED   = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed';
+    var API_KEY             = 'AIzaSyAmuoso1k61TZCOqUdPi3E7VIl2HA2UBmA';
+    var API_PAGESPEED       = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed';
 
-    var pyrmont                 = new google.maps.LatLng(46.522386, 6.628718);
-    var service                 = null;
-    var map                     = null;
-    var markers                 = [];
-    var searchMarkers           = [];
-    var overlays                = [];
-    var infoWindow              = null;
+    var pyrmont             = new google.maps.LatLng(46.522386, 6.628718);
+    var service             = null;
+    var map                 = null;
+    var markers             = [];
+    var searchMarkers       = [];
+    var overlays            = [];
+    var infoWindow          = null;
 
-    var request                 = {};
+    var request             = {};
 
     /**
      * Application bootstrap
@@ -36,6 +36,10 @@
             if ( searchRadius ) { request.radius = parseInt(searchRadius); } else { request.radius = 100; }
 
             mapSearch();
+        });
+
+        $('#wbfInputGeolocation').click(function (e) {
+           tryAutoGeoLocation();
         });
 
         $('#wbfInputRadius').change(function (e) {
@@ -81,10 +85,8 @@
             addSearchMarker(position);
         });
 
+        // add the initial search Marker
         addSearchMarker(request.location);
-
-        // try geolocation on the user's browser (https only)
-        tryAutoGeoLocation();
     }
 
     /**
@@ -412,7 +414,8 @@
             overlays = [];
         }
 
-        var circleOverlay = new google.maps.Circle({
+        var radiusMultiplier    = 1.5;
+        var circleOverlay       = new google.maps.Circle({
             strokeColor: '#0784bd',
             strokeOpacity: 0,
             strokeWeight: 1,
@@ -421,7 +424,7 @@
             map: map,
             center: position,
             clickable: false,
-            radius: radius * 1.5
+            radius: radius * radiusMultiplier
         });
 
         overlays.push(circleOverlay);
