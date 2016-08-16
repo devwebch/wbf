@@ -3,6 +3,9 @@
  */
 
 (function () {
+    var API_KEY         = 'AIzaSyAmuoso1k61TZCOqUdPi3E7VIl2HA2UBmA';
+    var API_PAGESPEED   = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed';
+
     var pyrmont                 = new google.maps.LatLng(46.522386, 6.628718);
     var service                 = null;
     var map                     = null;
@@ -11,15 +14,49 @@
     var overlays                = [];
     var infoWindow              = null;
 
-    var allowedSearchMarkers    = 1;
+    var request                 = {};
 
-    var API_KEY         = 'AIzaSyAmuoso1k61TZCOqUdPi3E7VIl2HA2UBmA';
-    var API_PAGESPEED   = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed';
+    /**
+     * Application bootstrap
+     */
+    jQuery(document).ready(function ($)
+    {
+        // init the Gmap
+        init();
 
-// Specify location, radius and place types for your Places API search.
-    var request         = {};
+        $('.wbf-search-form').submit(function (e) {
+            e.preventDefault();
 
-    function initialize() {
+            var searchText          = $('#wbfInputText').val();
+            var searchCategory      = $('#wbfInputCategory').val();
+            var searchRadius        = $('#wbfInputRadius').val();
+
+            if ( searchText ) { request.query = searchText; } else { request.query = ''; }
+            if ( searchCategory ) { request.types = [searchCategory]; } else { request.types = []; }
+            if ( searchRadius ) { request.radius = parseInt(searchRadius); } else { request.radius = 100; }
+
+            mapSearch();
+        });
+
+        $('#wbfInputRadius').change(function (e) {
+            var radius = (parseInt($(this).val()));
+            request.radius = radius;
+            showRadius(request.location, radius);
+        });
+
+        $('.wbf-location-form').submit(function (e) {
+            e.preventDefault();
+            var address          = $('#wbfInputAddress').val();
+            if (address) { geoCodeAddress(address); }
+        });
+
+    });
+
+    /**
+     * Initialize the Map
+     */
+    function init()
+    {
         // set the default Map request
         request = {
             location: pyrmont,
@@ -50,36 +87,9 @@
         tryAutoGeoLocation();
     }
 
-    function tryAutoGeoLocation()
-    {
-        // Try HTML5 geolocation.
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-
-                infoWindow.setPosition(pos);
-                infoWindow.setContent('Location found.');
-                map.setCenter(pos);
-            }, function() {
-                handleLocationError(true, infoWindow, map.getCenter());
-            });
-        } else {
-            // Browser doesn't support Geolocation
-            handleLocationError(false, infoWindow, map.getCenter());
-        }
-    }
-
-    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        console.log('cant handle this');
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-            'Error: The Geolocation service failed.' :
-            'Error: Your browser doesn\'t support geolocation.');
-    }
-
+    /**
+     * Request the Places API using the request object
+     */
     function mapSearch()
     {
         // reset the markers
@@ -100,6 +110,11 @@
         });
     }
 
+    /**
+     * Add a marker on the Map using a place object
+     * Handles the display of the InfoWindow for each marker
+     * @param place
+     */
     function addPlaceMarker(place)
     {
         var marker = new Marker({
@@ -147,6 +162,10 @@
         });
     }
 
+    /**
+     * Add a Search Marker, defining the base location for any research
+     * @param position
+     */
     function addSearchMarker(position)
     {
         if (searchMarkers.length) {
@@ -168,26 +187,26 @@
             }
         });
 
-        // TODO: Map icons : http://map-icons.com/
-
+        // if the marker is being moved, clear everything
         marker.addListener('dragstart', function () {
             hideRadius();
             clearPlaces();
         });
+
+        // when the marker is placed on the map, redefine search parameters
         marker.addListener('dragend', function () {
-            showRadius(marker.position, request.radius);
-            request.location = marker.position;
-            map.setCenter(marker.position);
+            setSearchLocation(marker.position);
         });
 
         searchMarkers.push(marker);
-
-        map.setCenter(marker.position);
-        request.location = marker.position;
-
-        showRadius(marker.position, request.radius);
+        setSearchLocation(marker.position);
     }
 
+    /**
+     * Analyze a place using its ID, perfom multiple operations
+     * Handles the display of informations
+     * @param placeID
+     */
     function analyze(placeID)
     {
         var place_id                    = null;
@@ -269,6 +288,8 @@
                         $('.wbf-business-details__add-to-list').removeClass('hidden');
                     });
                 } else {
+                    // TODO: add No Website exception
+
                     // hide progress indicator
                     $('.wbf-business-details-progress').addClass('hidden');
 
@@ -297,6 +318,63 @@
         });
     }
 
+    /**
+     * Pinpoint the user's location using HTML geolocation sensor
+     * @requires: SSL certificate
+     */
+    function tryAutoGeoLocation()
+    {
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                infoWindow.setPosition(pos);
+                infoWindow.setContent('Location found.');
+                map.setCenter(pos);
+            }, function() {
+                handleLocationError(true, infoWindow, map.getCenter());
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+        }
+    }
+
+    /**
+     * Handles location errors
+     * @param browserHasGeolocation
+     * @param infoWindow
+     * @param pos
+     */
+    function handleLocationError(browserHasGeolocation, infoWindow, pos)
+    {
+        // TODO: display error message outside the map
+        console.log('Browser has geolocation: ' + browserHasGeolocation);
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+            'Error: The Geolocation service failed.' :
+            'Error: Your browser doesn\'t support geolocation.');
+    }
+
+    /**
+     * Set the search location using a location object
+     * @param location
+     */
+    function setSearchLocation(location)
+    {
+        request.location = location;
+        map.setCenter(location);
+        showRadius(location, request.radius);
+    }
+
+    /**
+     * Encode a textual address and return a location object
+     * @param address
+     */
     function geoCodeAddress(address)
     {
         if (address) {
@@ -320,6 +398,11 @@
         }
     }
 
+    /**
+     * Handles the display of the search radius
+     * @param position
+     * @param radius
+     */
     function showRadius(position, radius)
     {
         if (overlays.length) {
@@ -344,6 +427,9 @@
         overlays.push(circleOverlay);
     }
 
+    /**
+     * Remove radiuses
+     */
     function hideRadius()
     {
         if (overlays.length) {
@@ -354,6 +440,9 @@
         }
     }
 
+    /**
+     * Remove every places pins
+     */
     function clearPlaces()
     {
         // reset the markers
@@ -363,38 +452,5 @@
         }
     }
 
-    jQuery(document).ready(function ($) {
-        // init the Gmap
-        initialize();
-
-        $('.wbf-search-form').submit(function (e) {
-            e.preventDefault();
-
-            var searchText          = $('#wbfInputText').val();
-            var searchCategory      = $('#wbfInputCategory').val();
-            var searchRadius        = $('#wbfInputRadius').val();
-
-            if ( searchText ) { request.query = searchText; } else { request.query = ''; }
-            if ( searchCategory ) { request.types = [searchCategory]; } else { request.types = []; }
-            if ( searchRadius ) { request.radius = parseInt(searchRadius); } else { request.radius = 100; }
-
-            mapSearch();
-        });
-
-        $('#wbfInputRadius').change(function (e) {
-
-            var radius = (parseInt($(this).val()));
-
-            request.radius = radius;
-            showRadius(request.location, radius);
-        });
-
-        $('.wbf-location-form').submit(function (e) {
-            e.preventDefault();
-            var address          = $('#wbfInputAddress').val();
-            if (address) { geoCodeAddress(address); }
-        });
-
-    });
 }());
 
