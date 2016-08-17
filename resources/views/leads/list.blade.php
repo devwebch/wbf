@@ -22,6 +22,7 @@
                     <th>Name</th>
                     <th>Address</th>
                     <th>URL</th>
+                    <th>Notes</th>
                     <th width="80"></th>
                 </tr>
                 </thead>
@@ -38,6 +39,7 @@
                                 None
                             @endif
                         </td>
+                        <td>{{$lead->notes}}</td>
                         <td>
                             <a href="/leads/edit/{{$lead->id}}"><i class="fa fa-pencil text-info"></i></a>&nbsp;
                             <a href="/leads/delete/{{$lead->id}}"><i class="fa fa-times text-danger"></i></a>

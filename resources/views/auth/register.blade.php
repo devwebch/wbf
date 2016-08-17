@@ -1,18 +1,32 @@
 @extends('layouts.naked')
 
 @section('content')
+<img src="assets/img/logo.png" alt="logo" data-src="assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
+<h3>LeadSpot let you scan for business opportunities.</h3>
+
 <form id="form-register" class="p-t-15" role="form" method="POST" action="{{ url('/register') }}">
     {{ csrf_field() }}
 
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }} form-group-default">
-                <label for="name" class="control-label">Name</label>
-                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}">
-                @if ($errors->has('name'))
-                    <span class="help-block">
-                <strong>{{ $errors->first('name') }}</strong>
-            </span>
+            <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }} form-group-default">
+                <label for="first_name" class="control-label">First name</label>
+                <input id="first_name" type="text" class="form-control" name="first_name" value="{{ old('first_name') }}">
+                @if ($errors->has('first_name'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('first_name') }}</strong>
+                </span>
+                @endif
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }} form-group-default">
+                <label for="last_name" class="control-label">Last name</label>
+                <input id="last_name" type="text" class="form-control" name="last_name" value="{{ old('last_name') }}">
+                @if ($errors->has('last_name'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('last_name') }}</strong>
+                </span>
                 @endif
             </div>
         </div>

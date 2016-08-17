@@ -7,11 +7,13 @@
  */
 
 $logged_in          = false;
-$user_name          = '';
+$user_first_name    = '';
+$user_last_name     = '';
 
 if (Auth::check()) {
     $logged_in  = true;
-    $user_name  = Auth::user()->name;
+    $user_first_name    = Auth::user()->first_name;
+    $user_last_name     = Auth::user()->last_name;
 } else {
 
 }
@@ -21,7 +23,8 @@ if (Auth::check()) {
 <!-- START User Info-->
 <div class="visible-lg visible-md m-t-10">
     <div class="pull-left p-r-10 p-t-10 fs-16 font-heading">
-        <span class="semi-bold">{{$user_name}}</span>
+        <span class="semi-bold">{{$user_first_name}}</span>
+        <span class="text-master">{{$user_last_name}}</span>
     </div>
     <div class="dropdown pull-right">
         <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"

@@ -22,10 +22,15 @@ class LeadController extends Controller
         $this->middleware('auth');
     }
 
-    public function getLeads()
+    public function getLeads(Request $request)
     {
+        // get the authenticated user
+        $user   = $request->user();
+
         // retrieve all entries
-        $leads  = Lead::all();
+        $leads  = Lead::where('user_id', $user->id)
+                    ->orderBy('name', 'asc')
+                    ->get();
 
         return view('leads.list', ['leads' => $leads]);
     }
@@ -38,12 +43,23 @@ class LeadController extends Controller
 
     public function editLead(Lead $lead, Request $request)
     {
-        $request->request->add(['leadID' => $lead->id]);
-        return view('leads.form', ['lead' => $lead, 'submit_label' => 'Save']);
+        // get the authenticated user
+        $user   = $request->user();
+
+        // if the user ID of the lead matches the logged in user
+        if ( $user->id == $lead->user_id ) {
+            $request->request->add(['leadID' => $lead->id]);
+            return view('leads.form', ['lead' => $lead, 'submit_label' => 'Save']);
+        } else {
+            return view('shared.error_page');
+        }
     }
 
     public function storeLead(Request $request)
     {
+        // get the authenticated user
+        $user   = $request->user();
+
         // set validation rules
         $this->validate($request, [
             'leadName'      => 'required',
@@ -66,7 +82,8 @@ class LeadController extends Controller
         $lead->url         = $request->leadUrl;
         $lead->lat         = $request->leadLat;
         $lead->lng         = $request->leadLng;
-
+        $lead->notes       = $request->leadNotes;
+        $lead->user_id     = $user->id;
 
         // insert the model in DB
         $lead->save();
