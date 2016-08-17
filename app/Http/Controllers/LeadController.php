@@ -12,6 +12,7 @@ namespace App\Http\Controllers;
 use App\Lead;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use League\Flysystem\Config;
 
 class LeadController extends Controller
 {
@@ -27,12 +28,26 @@ class LeadController extends Controller
         // get the authenticated user
         $user   = $request->user();
 
+        // retrieve lead status
+        $status = config('constants.lead.status');
+
+        $status_classes = [
+            0   => '',
+            1   => 'label-info',
+            2   => 'label-warning',
+            3   => 'label-success'
+        ];
+
         // retrieve all entries
         $leads  = Lead::where('user_id', $user->id)
                     ->orderBy('name', 'asc')
                     ->get();
 
-        return view('leads.list', ['leads' => $leads]);
+        return view('leads.list', [
+            'leads'             => $leads,
+            'status'            => $status,
+            'status_classes'    => $status_classes,
+        ]);
     }
 
     public function newLead(Request $request)

@@ -6,6 +6,14 @@
 @endsection
 
 @section('scripts')
+    <script>
+        $('.delete').click(function (e) {
+            e.preventDefault();
+            var $link   = $(this).attr('href');
+            $('#myModal').modal();
+            $('#myModal .continue').attr('href', $link);
+        });
+    </script>
 @endsection
 
 @section('content')
@@ -23,6 +31,7 @@
                     <th>Address</th>
                     <th>URL</th>
                     <th>Notes</th>
+                    <th>Status</th>
                     <th width="80"></th>
                 </tr>
                 </thead>
@@ -40,9 +49,10 @@
                             @endif
                         </td>
                         <td>{{$lead->notes}}</td>
+                        <td><span class="label {{$status_classes[$lead->status]}}">{{$status[$lead->status]}}</span></td>
                         <td>
                             <a href="/leads/edit/{{$lead->id}}"><i class="fa fa-pencil text-info"></i></a>&nbsp;
-                            <a href="/leads/delete/{{$lead->id}}"><i class="fa fa-times text-danger"></i></a>
+                            <a href="/leads/delete/{{$lead->id}}" class="delete"><i class="fa fa-times text-danger"></i></a>
                         </td>
                     </tr>
                     @endforeach
@@ -51,4 +61,27 @@
         </div>
     </div>
 
+    <!-- MODAL STICK UP  -->
+    <div class="modal fade stick-up" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content-wrapper">
+                <div class="modal-content">
+                    <div class="modal-header clearfix text-left">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
+                        </button>
+                        <h5>Delete this entry</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="no-margin">This action will delete this entry for ever.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-danger btn-cons pull-left inline continue">Delete</a>
+                        <button type="button" class="btn btn-default btn-cons no-margin pull-left inline" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- END MODAL STICK UP  -->
 @endsection

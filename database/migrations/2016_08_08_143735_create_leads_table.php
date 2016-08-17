@@ -20,6 +20,7 @@ class CreateLeadsTable extends Migration
             $table->string('address');
             $table->float('lat', 10, 8);
             $table->float('lng', 10, 8);
+            $table->integer('user_id');
         });
     }
 

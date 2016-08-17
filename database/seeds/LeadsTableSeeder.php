@@ -19,7 +19,7 @@ class LeadsTableSeeder extends Seeder
                     'address'       => 'Rue de Genève 7, 1003 Lausanne',
                     'lat'           => 46.5215533,
                     'lng'           => 6.6287104,
-                    'user_id'       => 0,
+                    'user_id'       => 1,
                     'created_at'    => date('Y-m-d H:i:s'),
                     'updated_at'    => date('Y-m-d H:i:s')
                 ]
