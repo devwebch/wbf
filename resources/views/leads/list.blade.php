@@ -77,7 +77,7 @@
                             @endif
                         </td>
                         <td>{{$lead->notes}}</td>
-                        <td><span class="label {{$status_classes[$lead->status]}}">{{$status[$lead->status]}}</span></td>
+                        <td><span class="label {{$status_classes[$lead->status]}}">{{trans($status[$lead->status])}}</span></td>
                         <td>
                             <a href="/leads/edit/{{$lead->id}}"><i class="fa fa-pencil text-info"></i></a>&nbsp;
                             <a href="/leads/delete/{{$lead->id}}" class="delete"><i class="fa fa-times text-danger"></i></a>

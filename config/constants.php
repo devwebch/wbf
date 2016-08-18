@@ -8,10 +8,10 @@
 return [
     'lead' => [
         'status' => [
-            0   => 'neutral',
-            1   => 'processing',
-            2   => 'accepted',
-            3   => 'denied'
+            0   => 'lead.status.neutral',
+            1   => 'lead.status.processing',
+            2   => 'lead.status.accepted',
+            3   => 'lead.status.denied'
         ]
     ]
 ];
