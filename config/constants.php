@@ -9,9 +9,9 @@ return [
     'lead' => [
         'status' => [
             0   => 'neutral',
-            1   => 'low',
-            2   => 'moderate',
-            3   => 'high'
+            1   => 'processing',
+            2   => 'accepted',
+            3   => 'denied'
         ]
     ]
 ];

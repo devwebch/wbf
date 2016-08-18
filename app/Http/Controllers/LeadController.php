@@ -33,9 +33,9 @@ class LeadController extends Controller
 
         $status_classes = [
             0   => '',
-            1   => 'label-info',
-            2   => 'label-warning',
-            3   => 'label-success'
+            1   => 'label-warning',
+            2   => 'label-success',
+            3   => 'label-danger'
         ];
 
         // retrieve all entries
@@ -53,7 +53,22 @@ class LeadController extends Controller
     public function newLead(Request $request)
     {
         $lead = new Lead();
-        return view('leads.form', ['lead' => $lead]);
+
+        // retrieve lead status
+        $status = config('constants.lead.status');
+
+        $status_classes = [
+            0   => '',
+            1   => 'text-warning',
+            2   => 'text-success',
+            3   => 'text-danger'
+        ];
+
+        return view('leads.form', [
+            'lead'              => $lead,
+            'status'            => $status,
+            'status_classes'    => $status_classes,
+        ]);
     }
 
     public function editLead(Lead $lead, Request $request)
@@ -61,10 +76,25 @@ class LeadController extends Controller
         // get the authenticated user
         $user   = $request->user();
 
+        // retrieve lead status
+        $status = config('constants.lead.status');
+
+        $status_classes = [
+            0   => '',
+            1   => 'text-warning',
+            2   => 'text-success',
+            3   => 'text-danger'
+        ];
+
         // if the user ID of the lead matches the logged in user
         if ( $user->id == $lead->user_id ) {
             $request->request->add(['leadID' => $lead->id]);
-            return view('leads.form', ['lead' => $lead, 'submit_label' => 'Save']);
+            return view('leads.form', [
+                'lead'          => $lead,
+                'submit_label'  => 'Save',
+                'status'        => $status,
+                'status_classes'    => $status_classes,
+            ]);
         } else {
             return view('shared.error_page');
         }
@@ -92,13 +122,14 @@ class LeadController extends Controller
         }
 
         // set the model value
-        $lead->name        = $request->leadName;
-        $lead->address     = $request->leadAddress;
-        $lead->url         = $request->leadUrl;
-        $lead->lat         = $request->leadLat;
-        $lead->lng         = $request->leadLng;
-        $lead->notes       = $request->leadNotes;
-        $lead->user_id     = $user->id;
+        $lead->name         = $request->leadName;
+        $lead->address      = $request->leadAddress;
+        $lead->url          = $request->leadUrl;
+        $lead->lat          = $request->leadLat;
+        $lead->lng          = $request->leadLng;
+        $lead->notes        = $request->leadNotes;
+        $lead->status       = $request->leadStatus;
+        $lead->user_id      = $user->id;
 
         // insert the model in DB
         $lead->save();

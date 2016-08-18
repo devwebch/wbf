@@ -61,9 +61,9 @@
                         <div class="form-group">
                             <label for="leadStatus">Status:</label>
                             <select name="leadStatus" id="leadStatus" class="form-control">
-                                <option value="0">Status 0</option>
-                                <option value="1">Status 1</option>
-                                <option value="2">Status 2</option>
+                                @foreach($status as $key => $item)
+                                <option value="{{$key}}" class="{{$status_classes[$key]}}">{{$item}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
