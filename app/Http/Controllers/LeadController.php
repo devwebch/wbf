@@ -138,9 +138,17 @@ class LeadController extends Controller
         return redirect('leads/list');
     }
 
-    public function deleteLead(Lead $lead)
+    public function deleteLead(Lead $lead, Request $request)
     {
-        $lead->delete();
-        return redirect('leads/list');
+        // get the authenticated user
+        $user   = $request->user();
+
+        // check if the lead author is the authenticated user
+        if ( $user->id == $lead->user_id ) {
+            $lead->delete();
+            return redirect('leads/list');
+        } else {
+            return view('shared.error_page');
+        }
     }
 }
