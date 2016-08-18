@@ -23,6 +23,25 @@ class LeadController extends Controller
         $this->middleware('auth');
     }
 
+    public function viewLead(Lead $lead, Request $request)
+    {
+        // retrieve lead status
+        $status = config('constants.lead.status');
+
+        $status_classes = [
+            0   => '',
+            1   => 'label-warning',
+            2   => 'label-success',
+            3   => 'label-danger'
+        ];
+
+        return view('leads.view', [
+            'lead'              => $lead,
+            'status'            => $status,
+            'status_classes'    => $status_classes
+        ]);
+    }
+
     public function getLeads(Request $request)
     {
         // get the authenticated user

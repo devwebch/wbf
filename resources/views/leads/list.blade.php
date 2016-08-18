@@ -35,6 +35,10 @@
             };
 
             table.dataTable(settings);
+
+            $('[data-toggle="popover"]').popover({
+                trigger: 'hover'
+            })
         });
         $('.delete').click(function (e) {
             e.preventDefault();
@@ -51,6 +55,12 @@
             <div class="panel-title">Table</div>
         </div>
         <div class="panel-body">
+            <div class="tooltip top" role="tooltip">
+                <div class="tooltip-arrow"></div>
+                <div class="tooltip-inner">
+                    Some tooltip text!
+                </div>
+            </div>
             <table id="leadsTable" class="table dataTable">
                 <thead>
                     <tr>
@@ -76,9 +86,16 @@
                                 None
                             @endif
                         </td>
-                        <td>{{$lead->notes}}</td>
+                        <td>
+                            @if($lead->notes)
+                            <a href="#" data-toggle="popover" data-placement="top" title="Notes" data-content="{{$lead->notes}}">
+                                <i class="fa fa-comment"></i>
+                            </a>
+                            @endif
+                        </td>
                         <td><span class="label {{$status_classes[$lead->status]}}">{{trans($status[$lead->status])}}</span></td>
                         <td>
+                            <a href="/leads/view/{{$lead->id}}"><i class="fa fa-eye text-info"></i></a>&nbsp;
                             <a href="/leads/edit/{{$lead->id}}"><i class="fa fa-pencil text-info"></i></a>&nbsp;
                             <a href="/leads/delete/{{$lead->id}}" class="delete"><i class="fa fa-times text-danger"></i></a>
                         </td>

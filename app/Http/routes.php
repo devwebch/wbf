@@ -33,5 +33,6 @@ Route::group(['prefix' => 'leads'], function (){
     Route::post('store/{id?}', 'LeadController@storeLead');
     Route::get('delete/{lead}', 'LeadController@deleteLead');
     Route::get('edit/{lead}', 'LeadController@editLead');
+    Route::get('view/{lead}', 'LeadController@viewLead');
 });
 Route::auth();
