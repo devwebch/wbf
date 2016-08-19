@@ -23,6 +23,11 @@ class LeadController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * @param Lead $lead
+     * @param Request $request
+     * @return View
+     */
     public function viewLead(Lead $lead, Request $request)
     {
         // retrieve lead status
@@ -42,6 +47,10 @@ class LeadController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return View
+     */
     public function getLeads(Request $request)
     {
         // get the authenticated user
@@ -69,6 +78,10 @@ class LeadController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return View
+     */
     public function newLead(Request $request)
     {
         $lead = new Lead();
@@ -90,6 +103,11 @@ class LeadController extends Controller
         ]);
     }
 
+    /**
+     * @param Lead $lead
+     * @param Request $request
+     * @return View
+     */
     public function editLead(Lead $lead, Request $request)
     {
         // get the authenticated user
@@ -119,6 +137,10 @@ class LeadController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function storeLead(Request $request)
     {
         // get the authenticated user
@@ -157,6 +179,11 @@ class LeadController extends Controller
         return redirect('leads/list');
     }
 
+    /**
+     * @param Lead $lead
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|View
+     */
     public function deleteLead(Lead $lead, Request $request)
     {
         // get the authenticated user

@@ -11,6 +11,7 @@
 |
 */
 
+
 Route::get('/', ['middleware' => 'auth', function () {
     return view('home');
 }]);

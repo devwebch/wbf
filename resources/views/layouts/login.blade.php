@@ -8,7 +8,7 @@
     <!-- START Login Background Pic Wrapper-->
     <div class="bg-pic">
         <!-- START Background Pic-->
-        <img src="assets/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg" data-src="assets/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg" data-src-retina="assets/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg" alt="" class="lazy">
+        <img src="{{asset('assets/img/photo-1464621922360-27f3bf0eca75.jpg')}}" data-src="{{asset('assets/img/photo-1464621922360-27f3bf0eca75.jpg')}}" data-src-retina="{{asset('img/photo-1464621922360-27f3bf0eca75.jpg')}}" alt="" class="lazy">
         <!-- END Background Pic-->
         <!-- START Background Caption-->
         <div class="bg-caption pull-bottom sm-pull-bottom text-white p-l-20 m-b-20">
