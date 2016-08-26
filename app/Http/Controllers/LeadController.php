@@ -151,8 +151,6 @@ class LeadController extends Controller
             'leadName'      => 'required',
             'leadAddress'   => 'required',
             'leadUrl'       => 'required|url',
-            'leadLat'       => 'required|numeric',
-            'leadLng'       => 'required|numeric'
         ]);
 
         // if it is an update, we retrieve the Lead object
@@ -176,7 +174,7 @@ class LeadController extends Controller
         $lead->save();
 
         // redirect to Leads list
-        return redirect('leads/list');
+        return redirect('/leads/list');
     }
 
     /**

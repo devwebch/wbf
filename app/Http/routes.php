@@ -24,9 +24,9 @@ Route::get('/form', function () {
     return view('form');
 });
 
-Route::get('/maps', function () {
+Route::get('/maps', ['middleware' => 'auth', function () {
     return view('maps');
-});
+}]);
 
 Route::group(['prefix' => 'leads'], function (){
     Route::get('list', 'LeadController@getLeads');
@@ -36,4 +36,10 @@ Route::group(['prefix' => 'leads'], function (){
     Route::get('edit/{lead}', 'LeadController@editLead');
     Route::get('view/{lead}', 'LeadController@viewLead');
 });
+
+Route::group(['prefix' => 'api'], function(){
+    Route::post('/leads/save', 'LeadServiceController@save');
+});
+
+
 Route::auth();

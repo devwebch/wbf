@@ -13,6 +13,7 @@
     var searchMarkers       = [];
     var overlays            = [];
     var infoWindow          = null;
+    var place               = {};
 
     var request             = {};
 
@@ -23,6 +24,13 @@
     {
         // init the Gmap
         init();
+
+        // setup AJAX requests to send the CSRF token
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('input[name="_token"]').val()
+            }
+        });
 
         $('.wbf-search-form').submit(function (e) {
             e.preventDefault();
@@ -54,6 +62,18 @@
             if (address) { geoCodeAddress(address); }
         });
 
+        $('.btn-add-to-list').click(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/leads/save',
+                data: place,
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        });
     });
 
     /**
@@ -129,7 +149,7 @@
             types: place.types,
             permanently_closed: place.permanently_closed,
             icon: {
-                url: 'assets/img/icn_pin_blue.png',
+                url: '/assets/img/icn_pin_blue.png',
                 size: new google.maps.Size(24, 30),
                 origin: new google.maps.Point(0,0),
                 anchor: new google.maps.Point(10, 25)
@@ -182,10 +202,10 @@
             position: position,
             draggable: true,
             icon: {
-                url: 'assets/img/icn_pin_red.png',
-                size: new google.maps.Size(24, 30),
+                url: '/assets/img/icn_up_circle_arrow.png',
+                size: new google.maps.Size(20, 20),
                 origin: new google.maps.Point(0,0),
-                anchor: new google.maps.Point(10, 25)
+                anchor: new google.maps.Point(10, 10)
             }
         });
 
@@ -211,30 +231,28 @@
      */
     function analyze(placeID)
     {
-        var place_id                    = null;
-        var place_name                  = null;
-        var place_rating                = null;
-        var place_google_page           = null;
-        var place_website               = null;
-        var place_opening_hours         = null;
-        var place_formatted_address     = null;
+        place = {};
 
         $('.wbf-business-details').addClass('hidden');
         $('.wbf-business-details-progress').removeClass('hidden');
         $('.wbf-business-details-introduction').addClass('hidden');
 
+        // Run PageSpeed analysis
         service.getDetails({placeId: placeID}, function (placeResult, placesServiceStatus) {
             if (placesServiceStatus == google.maps.places.PlacesServiceStatus.OK) {
+                console.log(placeResult);
+                place.id                            = placeResult.place_id;
+                place.name                          = placeResult.name;
+                place.rating                        = placeResult.rating;
+                place.website                       = placeResult.website;
+                place.google_page                   = placeResult.url;
+                place.opening_hours                 = placeResult.opening_hours;
+                place.formatted_address             = placeResult.formatted_address;
+                place.formatted_phone_number        = placeResult.formatted_phone_number;
+                place.lat                           = placeResult.geometry.location.lat;
+                place.lng                           = placeResult.geometry.location.lng;
 
-                place_id                    = placeResult.place_id;
-                place_name                  = placeResult.name;
-                place_rating                = placeResult.rating;
-                place_google_page           = placeResult.url;
-                place_website               = placeResult.website;
-                place_opening_hours         = placeResult.opening_hours;
-                place_formatted_address     = placeResult.formatted_address;
-
-                var place_website_encoded       = encodeURI(place_website);
+                var place_website_encoded   = encodeURI(place.website);
 
                 var API_URL = API_PAGESPEED + '?url=' + place_website_encoded + '&screenshot=true&strategy=mobile&key=' + API_KEY;
 
@@ -252,33 +270,39 @@
                 // show the details panel
                 $('.wbf-business-details').removeClass('hidden');
 
-                if (place_website) {
-                    var score_speed         = '';
-                    var score_usability     = '';
+                if (place.website) {
+                    place.score_speed         = '';
+                    place.score_usability     = '';
                     var screenshot          = '';
 
                     $.getJSON(API_URL, function (data) {
-                        score_speed         = data.ruleGroups.SPEED.score;
-                        score_usability     = data.ruleGroups.USABILITY.score;
-                        screenshot          = data.screenshot.data;
+                        place.page_title          = data.title;
+                        place.score_speed         = data.ruleGroups.SPEED.score;
+                        place.score_usability     = data.ruleGroups.USABILITY.score;
+                        place.score_screenshot    = data.screenshot.data;
 
-                        screenshot = screenshot.replace(/_/g, '/');
-                        screenshot = screenshot.replace(/-/g, '+');
+                        place.stats                         = {};
+                        place.stats.total_request_bytes     = data.pageStats.totalRequestBytes;
+                        place.stats.num_js_ressources       = data.pageStats.numberJsResources;
+                        place.stats.num_css_ressources      = data.pageStats.numberCssResources;
+
+                        place.score_screenshot = place.score_screenshot.replace(/_/g, '/');
+                        place.score_screenshot = place.score_screenshot.replace(/-/g, '+');
                     }).complete(function () {
                         // hide progress indicator
                         $('.wbf-business-details-progress').addClass('hidden');
 
                         // details: pagespeed
-                        if (score_speed) {
+                        if (place.score_speed && place.score_usability) {
                             $('.wbf-business-details__pagespeed').removeClass('hidden');
-                            $('.wbf-business-details__pagespeed .score-speed').html(score_speed);
-                            $('.wbf-business-details__pagespeed .score-usability').html(score_usability);
+                            $('.wbf-business-details__pagespeed .score-speed').html(place.score_speed);
+                            $('.wbf-business-details__pagespeed .score-usability').html(place.score_usability);
                         }
 
                         // details: preview
-                        if (screenshot) {
+                        if (place.score_screenshot) {
                             $('.wbf-business-details__preview').removeClass('hidden');
-                            $('.wbf-business-details__preview .image').attr('src', 'data:image/jpeg;base64,' + screenshot);
+                            $('.wbf-business-details__preview .image').attr('src', 'data:image/jpeg;base64,' + place.score_screenshot);
                         }
 
                         // details: indicators
@@ -300,24 +324,25 @@
                 }
 
             } else {
-                console.log('Impossible de récupérer les informations.');
+                console.log('No PageSpeed informations available.');
             }
 
             // details: title
-            if (place_name) {
+            if (place.name) {
                 $('.wbf-business-details__title').removeClass('hidden');
-                $('.wbf-business-details__title .title').html(place_name);
-                $('.wbf-business-details__title .address').html(place_formatted_address);
-                $('.wbf-business-details__title .website').html(place_website);
-                $('.wbf-business-details__title .website').attr('href', place_website);
+                $('.wbf-business-details__title .title').html(place.name);
+                $('.wbf-business-details__title .address').html(place.formatted_address);
+                $('.wbf-business-details__title .website').html(place.website);
+                $('.wbf-business-details__title .website').attr('href', place.website);
             }
 
-            if (place_website) {
+            if (place.website) {
                 $('.wbf-business-details__title .website').removeClass('hidden');
             }
 
-
         });
+
+
     }
 
     /**

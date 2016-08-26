@@ -2,6 +2,10 @@
 
 @section('title', 'List of leads')
 
+@section('breadcrumb')
+    <li><a href="/leads/list" class="active">Leads list</a></li>
+@endsection
+
 @section('styles')
     <link rel="stylesheet" href="{{asset('assets/plugins/jquery-datatable/media/css/dataTables.bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/jquery-datatable/extensions/FixedColumns/css/dataTables.fixedColumns.min.css')}}">
@@ -30,7 +34,10 @@
                 },
                 "iDisplayLength": 10,
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [ 4, 6 ] }
+                    { 'bSortable': false, 'aTargets': [ 3, 6 ] }
+                ],
+                "order": [
+                        [0, 'asc']
                 ]
             };
 
@@ -52,52 +59,57 @@
 @section('content')
     <div class="panel">
         <div class="panel-heading">
-            <div class="panel-title">Table</div>
+            <div class="panel-title">Leads list</div>
+            <div class="pull-right">
+                <a href="/leads/new" class="btn btn-primary"><i class="pg-plus"></i> New lead</a>
+            </div>
+            <div class="clearfix"></div>
         </div>
         <div class="panel-body">
             <div class="tooltip top" role="tooltip">
                 <div class="tooltip-arrow"></div>
-                <div class="tooltip-inner">
-                    Some tooltip text!
-                </div>
+                <div class="tooltip-inner"></div>
             </div>
             <table id="leadsTable" class="table dataTable">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Name</th>
                         <th>Address</th>
                         <th>URL</th>
                         <th>Notes</th>
                         <th>Status</th>
-                        <th width="80"></th>
+                        <th>Date</th>
+                        <th width="120">&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($leads as $lead)
                     <tr>
-                        <td>{{$lead->id}}</td>
-                        <td>{{$lead->name}}</td>
+                        <td><a href="/leads/view/{{$lead->id}}">{{$lead->name}}</a></td>
                         <td>{{$lead->address}}</td>
                         <td>
                             @if($lead->url)
                                 <a href="{{$lead->url}}" target="_blank">{{$lead->url}}</a>
                             @else
-                                None
+                                -
                             @endif
                         </td>
                         <td>
                             @if($lead->notes)
-                            <a href="#" data-toggle="popover" data-placement="top" title="Notes" data-content="{{$lead->notes}}">
+                            <a href="#" class="text-success" data-toggle="popover" data-placement="top" title="Notes" data-content="{{$lead->notes}}">
                                 <i class="fa fa-comment"></i>
                             </a>
                             @endif
                         </td>
                         <td><span class="label {{$status_classes[$lead->status]}}">{{trans($status[$lead->status])}}</span></td>
+                        <td>{{date('d.m.Y', strtotime($lead->created_at))}}</td>
                         <td>
-                            <a href="/leads/view/{{$lead->id}}"><i class="fa fa-eye text-info"></i></a>&nbsp;
-                            <a href="/leads/edit/{{$lead->id}}"><i class="fa fa-pencil text-info"></i></a>&nbsp;
-                            <a href="/leads/delete/{{$lead->id}}" class="delete"><i class="fa fa-times text-danger"></i></a>
+                            <div class="btn-group pull-right" role="group" aria-label="...">
+                                <a href="/leads/view/{{$lead->id}}" class="btn btn-default btn-xs"><i class="fa fa-eye"></i></a>
+                                <a href="/leads/edit/{{$lead->id}}" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></a>&nbsp;
+                                <a href="/leads/delete/{{$lead->id}}" class="btn btn-default btn-xs delete"><i class="fa fa-times text-danger"></i></a>
+                            </div>
+                            <div class="clearfix"></div>
                         </td>
                     </tr>
                     @endforeach

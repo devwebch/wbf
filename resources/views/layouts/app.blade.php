@@ -274,11 +274,8 @@
                     <div class="inner">
                         <!-- START BREADCRUMB -->
                         <ul class="breadcrumb">
-                            <li>
-                                <p>Home</p>
-                            </li>
-                            <li><a href="#" class="active">Barebone template</a>
-                            </li>
+                            <li><p>Home</p></li>
+                            @yield('breadcrumb')
                         </ul>
                         <!-- END BREADCRUMB -->
                     </div>

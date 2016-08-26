@@ -36,17 +36,17 @@
                     <label for="leadUrl">URL:</label>
                     <input type="text" class="form-control" name="leadUrl" id="leadUrl" placeholder="URL" value="{{old('leadUrl', $lead->url)}}">
                 </div>
-                <div class="row">
+                <div class="row hidden">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="leadLat">Latitude:</label>
-                            <input type="text" class="form-control" name="leadLat" id="leadLat" value="46.5215533">
+                            <input type="text" class="form-control" name="leadLat" id="leadLat" value="{{old('leadLat', $lead->lat)}}">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="leadLng">Longitude:</label>
-                            <input type="text" class="form-control" name="leadLng" id="leadLng" value="6.6287104">
+                            <input type="text" class="form-control" name="leadLng" id="leadLng" value="{{old('leadLng', $lead->lng)}}">
                         </div>
                     </div>
                 </div>

@@ -154,6 +154,7 @@
                         <p>Please search for a business and click analyze to get informations, lorem ipsum.</p>
                     </div>
                     <div class="wbf-business-details">
+                        {{csrf_field()}}
                         <div class="wbf-business-details__title hidden">
                             <h3 class="title">Titre du site</h3>
                             <p class="address">Rue du Port-Franc 16, 1003 Lausanne, Suisse</p>
@@ -209,8 +210,8 @@
                             </table>
                             <hr>
                         </div>
-                        <div class="wbf-business-details__add-to-list hidden">
-                            <button class="btn btn-complete btn-lg btn-block">Add to my list</button>
+                        <div class="wbf-business-details__add-to-list hiddden">
+                            <button class="btn btn-complete btn-lg btn-block btn-add-to-list">Add to my list</button>
                         </div>
                     </div>
 
