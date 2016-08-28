@@ -62,7 +62,7 @@
                             <label for="leadStatus">Status:</label>
                             <select name="leadStatus" id="leadStatus" class="form-control">
                                 @foreach($status as $key => $item)
-                                <option value="{{$key}}" class="{{$status_classes[$key]}}">
+                                <option value="{{$key}}" class="{{$status_classes[$key]}}" {{(old('leadStatus', $lead->status) == $key) ? 'selected' : ''}}>
                                     {{trans($item)}}
                                 </option>
                                 @endforeach

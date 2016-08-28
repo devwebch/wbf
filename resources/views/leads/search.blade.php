@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Google Maps')
+@section('title', 'Search new leads')
+
+@section('breadcrumb')
+    <li><a href="/leads/search" class="active">Search leads</a></li>
+@endsection
 
 @section('styles')
     <link rel="stylesheet" href="{{asset('assets/plugins/bootstrap-select2/select2.css')}}">
@@ -26,7 +30,7 @@
                     <form class="wbf-location-form form-inline">
                         <div class="form-group">
                             <label for="wbfInputAddress" class="sr-only">Address</label>
-                            <input type="text" name="wbfInputAddress" id="wbfInputAddress" class="form-control" placeholder="Address...">
+                            <input type="text" name="wbfInputAddress" id="wbfInputAddress" class="form-control" placeholder="Address..." style="width: 300px">
                         </div>
                         <div class="form-group">
                             <button class="btn btn-default" id="wbfInputGeolocation"><i class="fa fa-crosshairs"></i></button>
@@ -161,6 +165,9 @@
                             <p><a href="#" class="website hidden" target="_blank">http://www.example.com</a> <i class="fa fa-external-link"></i></p>
                             <hr>
                         </div>
+                        <div class="wbf-business-details__no-website hidden">
+                            <div class="alert alert-info"><p>It looks like this business have no website.</p></div>
+                        </div>
                         <div class="wbf-business-details__pagespeed hidden">
                             <h4>Pagespeed scores</h4>
                             <table class="table table-condensed">
@@ -179,17 +186,17 @@
                         <div class="wbf-business-details__preview hidden m-b-20">
                             <h4>Mobile preview</h4>
                             <div style="text-align: center;">
-                                <img class="image" src="{{asset('assets/img/filelink.png')}}" alt="">
+                                <img class="image" src="" alt="">
                             </div>
                         </div>
                         <div class="wbf-business-details__indicators hidden">
                             <h4>Obsolescence indicators</h4>
                             <table class="table table-condensed">
                                 <thead>
-                                    <tr>
-                                        <th>Variable</th>
-                                        <th>Status</th>
-                                    </tr>
+                                <tr>
+                                    <th>Variable</th>
+                                    <th>Status</th>
+                                </tr>
                                 </thead>
                                 <tr class="website">
                                     <td><strong>Website</strong></td>
@@ -210,7 +217,7 @@
                             </table>
                             <hr>
                         </div>
-                        <div class="wbf-business-details__add-to-list hiddden">
+                        <div class="wbf-business-details__add-to-list hidden">
                             <button class="btn btn-complete btn-lg btn-block btn-add-to-list">Add to my list</button>
                         </div>
                     </div>

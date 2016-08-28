@@ -2,7 +2,7 @@
 
 @section('content')
 <img src="assets/img/logo.png" alt="logo" data-src="assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
-<h3>LeadSpot let you scan for business opportunities.</h3>
+<h3>Create a free account in one simple step.</h3>
 
 <form id="form-register" class="p-t-15" role="form" method="POST" action="{{ url('/register') }}">
     {{ csrf_field() }}

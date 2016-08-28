@@ -14,97 +14,54 @@
     <div class="row">
         <div class="col-md-6 m-b-10">
             <div class="panel">
-                <div class="panel-heading">
-                    <div class="panel-title">Form</div>
-                </div>
                 <div class="panel-body">
-                    <form role="form">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                    <h3>Hi there {{Auth::user()->first_name}}</h3>
+                </div>
+            </div>
+            <div class="ar-1-1">
+                <div class="widget-11-2 panel no-border panel-condensed no-margin widget-loader-circle">
+                    <div class="padding-25">
+                        <div class="pull-left">
+                            <h2 class="no-margin">Your leads</h2>
+                            <p class="no-margin">Today's sales</p>
                         </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                        </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                    </form>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="auto-overflow widget-11-2-table">
+                        <table class="table table-condensed table-hover">
+                            <tbody>
+                                @foreach($leads as $lead)
+                                <tr>
+                                    <td class="col-lg-2 fs-18">{{date('d.m.Y', strtotime($lead->created_at))}}</td>
+                                    <td class="fs-12 col-lg-6">
+                                        <a href="/leads/view/{{$lead->id}}">{{$lead->name}}</a>
+                                    </td>
+                                    <td class="text-right col-lg-3">
+                                        <span class="label {{$status_classes[$lead->status]}}">{{trans($status[$lead->status])}}</span>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3 m-b-10">
             <div class="ar-1-1">
-                <div class="widget-3 panel no-border bg-complete no-margin widget-loader-bar">
-                    <div class="panel-body no-padding">
-                        <div class="metro live-tile" data-mode="carousel" data-start-now="true" data-delay="3000">
-                            <div class="slide-front tiles slide active">
-                                <div class="padding-30">
-                                    <div class="pull-top">
-                                        <div class="pull-left visible-lg visible-xlg">
-                                            <i class="pg-map"></i>
-                                        </div>
-                                        <div class="pull-right">
-                                            <ul class="list-inline ">
-                                                <li>
-                                                    <a href="#" class="no-decoration"><i class="pg-comment"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="widget-3-fav no-decoration"><i class="pg-like"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="pull-bottom p-b-30">
-                                        <p class="p-t-10 fs-12 p-b-5 hint-text">21 Jan</p>
-
-                                        <h3 class="no-margin text-white p-b-10">Carefully
-                                            <br>designed for a
-                                            <br>great
-                                            <span class="semi-bold">experience</span>
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slide-back tiles">
-                                <div class="padding-30">
-                                    <div class="pull-top">
-                                        <div class="pull-left visible-lg visible-xlg">
-                                            <i class="pg-map"></i>
-                                        </div>
-                                        <div class="pull-right">
-                                            <ul class="list-inline ">
-                                                <li>
-                                                    <a href="#" class="no-decoration"><i class="pg-comment"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="widget-3-fav no-decoration"><i class="pg-like"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="pull-bottom p-b-30">
-                                        <p class="p-t-10 fs-12 p-b-5 hint-text">21 Jan</p>
-
-                                        <h3 class="no-margin text-white p-b-10">A whole new
-                                            <br>
-                                            <span class="semi-bold">page</span>
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="widget-2 panel no-border bg-success widget no-margin">
+                    <div class="panel-body">
+                        <div class="pull-bottom bottom-left bottom-right padding-25">
+                            <a href="#">
+                                <h3 class="text-white">So much more to see at a glance.</h3>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3 m-b-10">
-            <div class="ar-2-1">
+            <div class="ar-1-1">
                 <div class="panel no-border no-margin widget-loader-bar">
                     <div class="container-xs-height full-height">
                         <div class="row-xs-height">
@@ -143,12 +100,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h3>Hello</h3>
-            <p>Lorem ipsum dolor sit amet.</p>
         </div>
     </div>
 @endsection

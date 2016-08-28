@@ -3,7 +3,8 @@
 @section('title', 'New lead')
 
 @section('breadcrumb')
-    <li><a href="/leads/view/{lead}" class="active">Details</a></li>
+    <li><a href="/leads/list" class="">Leads</a></li>
+    <li><a href="/leads/view/{lead}" class="active">Details: {{$lead->name}}</a></li>
 @endsection
 
 @section('styles')
@@ -85,22 +86,12 @@
                     <div id="map" style="height: 400px;" class="m-t-20"></div>
                 </div>
                 <div class="col-md-4">
-                    @if($lead->notes)
-                        <h4>Notes</h4>
-                        {{$lead->notes}}
-                    @endif
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    @if($lead->notes)
                     <h4>Notes</h4>
-                    {{$lead->notes}}
+                    @if($lead->notes)
+                        {{$lead->notes}}
+                    @else
+                        <a href="/leads/edit/{{$lead->id}}">Edit and add notes</a>
                     @endif
-                </div>
-                <div class="col-md-6">
-
                 </div>
             </div>
         </div>

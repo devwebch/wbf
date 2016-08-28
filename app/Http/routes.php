@@ -12,25 +12,12 @@
 */
 
 
-Route::get('/', ['middleware' => 'auth', function () {
-    return view('home');
-}]);
-
-Route::get('/table', ['middleware' => 'auth', function () {
-    return view('table');
-}]);
-
-Route::get('/form', function () {
-    return view('form');
-});
-
-Route::get('/maps', ['middleware' => 'auth', function () {
-    return view('maps');
-}]);
+Route::get('/', 'Controller@home');
 
 Route::group(['prefix' => 'leads'], function (){
     Route::get('list', 'LeadController@getLeads');
     Route::get('new', 'LeadController@newLead');
+    Route::get('search', function () { return view('leads.search'); });
     Route::post('store/{id?}', 'LeadController@storeLead');
     Route::get('delete/{lead}', 'LeadController@deleteLead');
     Route::get('edit/{lead}', 'LeadController@editLead');

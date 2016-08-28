@@ -13,9 +13,9 @@
         <!-- START Background Caption-->
         <div class="bg-caption pull-bottom sm-pull-bottom text-white p-l-20 m-b-20">
             <h2 class="semi-bold text-white">
-                Pages make it easy to enjoy what matters the most in the life</h2>
+                Search for local business opportunities.</h2>
             <p class="small">
-                images Displayed are solely for representation purposes only, All work copyright of respective owner, otherwise © 2013-2014 REVOX.
+                images Displayed are solely for representation purposes only, All work copyright of respective owner, otherwise © 2016 LeadSpot.
             </p>
         </div>
         <!-- END Background Caption-->
@@ -25,21 +25,17 @@
     <div class="login-container bg-white">
         <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
             <img src="assets/img/logo.png" alt="logo" data-src="assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
-            <p class="p-t-35">Sign into your pages account</p>
+            <p class="p-t-10">Sign into your LeadSpot account</p>
             <!-- START Login Form -->
             @yield('content')
             <!--END Login Form-->
             <div class="pull-bottom sm-pull-bottom">
                 <div class="m-b-30 p-r-80 sm-m-t-20 sm-p-r-15 sm-p-b-20 clearfix">
-                    <div class="col-sm-3 col-md-2 no-padding">
-                        <img alt="" class="m-t-5" data-src="assets/img/demo/pages_icon.png" data-src-retina="assets/img/demo/pages_icon_2x.png" height="60" src="assets/img/demo/pages_icon.png" width="60">
-                    </div>
-                    <div class="col-sm-9 no-padding m-t-10">
+                    <div class="col-sm-12 no-padding m-t-10">
+                        <strong>Don't have an account yet?</strong>
                         <p>
                             <small>
-                                Create a pages account. If you have a facebook account, log into it for this
-                                process. Sign in with <a href="#" class="text-info">Facebook</a> or <a href="#"
-                                                                                                       class="text-info">Google</a>
+                                <a href="/register">Create a free account</a>
                             </small>
                         </p>
                     </div>

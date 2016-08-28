@@ -3,18 +3,12 @@
 <head>
     @include('layouts.partials.head')
 </head>
-<body class="fixed-header menu-pind">
+<body class="fixed-header menu-pin-nope">
 <!-- BEGIN SIDEBAR -->
 <div class="page-sidebar" data-pages="sidebar">
-    <div id="appMenu" class="sidebar-overlay-slide from-top">
-    </div>
     <!-- BEGIN SIDEBAR HEADER -->
     <div class="sidebar-header">
         <img src="{{asset('assets/img/logo_white.png')}}" alt="logo" class="brand" data-src="{{asset('assets/img/logo_white.png')}}" data-src-retina="{{asset('assets/img/logo_white2x.png')}}" width="78" height="22">
-        <div class="sidebar-header-controls">
-            <button data-pages-toggle="#appMenu" class="btn btn-xs sidebar-slide-toggle btn-link m-l-20" type="button"><i class="fa fa-angle-down fs-16"></i>
-            </button>
-        </div>
     </div>
     <!-- END SIDEBAR HEADER -->
     <!-- BEGIN SIDEBAR MENU -->
@@ -28,60 +22,16 @@
                 <span class="icon-thumbnail "><i class="pg-mail"></i></span>
             </li>
             <li class="">
-                <a href="/table">
-                    <span class="title">Table</span>
-                </a>
-                <span class="icon-thumbnail "><i class="pg-social"></i></span>
-            </li>
-            <li class="">
-                <a href="/form">
-                    <span class="title">Form</span>
-                </a>
-                <span class="icon-thumbnail "><i class="pg-social"></i></span>
-            </li>
-            <li class="">
-                <a href="/maps">
-                    <span class="title">Google Maps</span>
+                <a href="/leads/search">
+                    <span class="title">Search leads</span>
                 </a>
                 <span class="icon-thumbnail "><i class="pg-map"></i></span>
             </li>
             <li class="">
-                <a href="javascript:;">
-                    <span class="title">Leads</span>
-                    <span class=" arrow"></span>
+                <a href="/leads/list">
+                    <span class="title">My Leads</span>
                 </a>
-                <span class="icon-thumbnail"><i class="pg-grid"></i></span>
-                <ul class="sub-menu">
-                    <li class="">
-                        <a href="/leads/list">List</a>
-                        <span class="icon-thumbnail">li</span>
-                    </li>
-                    <li class="">
-                        <a href="/leads/new">New lead</a>
-                        <span class="icon-thumbnail">nl</span>
-                    </li>
-                </ul>
-            </li>
-            <li class="">
-                <a href="javascript:;">
-                    <span class="title">Page 3</span>
-                    <span class=" arrow"></span>
-                </a>
-                <span class="icon-thumbnail"><i class="pg-grid"></i></span>
-                <ul class="sub-menu">
-                    <li class="">
-                        <a href="#">Sub Page 1</a>
-                        <span class="icon-thumbnail">sp</span>
-                    </li>
-                    <li class="">
-                        <a href="#">Sub Page 2</a>
-                        <span class="icon-thumbnail">sp</span>
-                    </li>
-                    <li class="">
-                        <a href="#">Sub Page 3</a>
-                        <span class="icon-thumbnail">sp</span>
-                    </li>
-                </ul>
+                <span class="icon-thumbnail "><i class="pg-folder_alt"></i></span>
             </li>
         </ul>
         <div class="clearfix"></div>
@@ -300,6 +250,9 @@
                     <span class="hint-text">All rights reserved.</span>
                     <span class="sm-block"><a href="#" class="m-l-10 m-r-10">Terms of use</a> | <a href="#" class="m-l-10">Privacy Policy</a>
                         </span>
+                </p>
+                <p class="small no-margin pull-right sm-pull-reset p-l-20">
+                    <span class="hint-text">V 0.5</span>
                 </p>
                 <p class="small no-margin pull-right sm-pull-reset">
                     <a href="#">Powered by</a>
