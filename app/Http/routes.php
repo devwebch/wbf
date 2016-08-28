@@ -14,7 +14,7 @@
 
 Route::get('/', 'Controller@home');
 
-Route::group(['prefix' => 'leads'], function (){
+Route::group(['prefix' => 'leads', 'middleware' => 'auth'], function (){
     Route::get('list', 'LeadController@getLeads');
     Route::get('new', 'LeadController@newLead');
     Route::get('search', function () { return view('leads.search'); });
@@ -24,9 +24,12 @@ Route::group(['prefix' => 'leads'], function (){
     Route::get('view/{lead}', 'LeadController@viewLead');
 });
 
-Route::group(['prefix' => 'api'], function(){
+Route::group(['prefix' => 'api', 'middleware' => 'auth'], function(){
     Route::post('/leads/save', 'LeadServiceController@save');
 });
 
+Route::group(['prefix' => 'account', 'middleware' => 'auth'], function(){
+    Route::get('/', function (){ return view('auth.account.user'); });
+});
 
 Route::auth();

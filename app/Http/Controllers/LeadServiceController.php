@@ -34,7 +34,7 @@ class LeadServiceController extends Controller
         $lead->user_id  = $user->id;
 
         // save the Model
-        //$lead->save();
+        $lead->save();
 
         return $request->all();
     }

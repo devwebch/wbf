@@ -37,7 +37,7 @@
                     { 'bSortable': false, 'aTargets': [ 3, 6 ] }
                 ],
                 "order": [
-                        [0, 'asc']
+                        [5, 'desc']
                 ]
             };
 

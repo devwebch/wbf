@@ -8,7 +8,12 @@
 <div class="page-sidebar" data-pages="sidebar">
     <!-- BEGIN SIDEBAR HEADER -->
     <div class="sidebar-header">
-        <img src="{{asset('assets/img/logo_white.png')}}" alt="logo" class="brand" data-src="{{asset('assets/img/logo_white.png')}}" data-src-retina="{{asset('assets/img/logo_white2x.png')}}" width="78" height="22">
+        <a href="/"><img src="{{asset('assets/img/logo_white.png')}}"
+             alt="LeadSpot"
+             class="brand"
+             data-src="{{asset('assets/img/logo_white.png')}}"
+             data-src-retina="{{asset('assets/img/logo_white2x.png')}}"
+             width="78" height="22"></a>
     </div>
     <!-- END SIDEBAR HEADER -->
     <!-- BEGIN SIDEBAR MENU -->
@@ -59,7 +64,11 @@
             <div class="pull-center hidden-md hidden-lg">
                 <div class="header-inner">
                     <div class="brand inline">
-                        <img src="{{asset('assets/img/logo.png')}}" alt="logo" data-src="{{asset('assets/img/logo.png')}}" data-src-retina="{{asset('assets/img/logo_2x.png')}}" width="78" height="22">
+                        <a href="/"><img src="{{asset('assets/img/logo.png')}}" 
+                             alt="LeadSpot" 
+                             data-src="{{asset('assets/img/logo.png')}}" 
+                             data-src-retina="{{asset('assets/img/logo_2x.png')}}" 
+                             width="78" height="22"></a>
                     </div>
                 </div>
             </div>
@@ -78,7 +87,8 @@
         <div class=" pull-left sm-table hidden-xs hidden-sm">
             <div class="header-inner">
                 <div class="brand inline">
-                    <img src="{{asset('assets/img/logo.png')}}" alt="logo" data-src="{{asset('assets/img/logo.png')}}" data-src-retina="{{asset('assets/img/logo_2x.png')}}" width="78" height="22">
+                    <img src="{{asset('assets/img/logo.png')}}"
+                         alt="LeadSpot" data-src="{{asset('assets/img/logo.png')}}" data-src-retina="{{asset('assets/img/logo_2x.png')}}" width="78" height="22">
                 </div>
                 <!-- START NOTIFICATION LIST -->
                 <ul class="notification-list no-margin hidden-sm hidden-xs b-grey b-l b-r no-style p-l-30 p-r-20">

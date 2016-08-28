@@ -9,12 +9,14 @@
 @section('styles')
     <link rel="stylesheet" href="{{asset('assets/plugins/bootstrap-select2/select2.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/map-icons.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/plugins/alerts/sweet-alert.css')}}">
 @endsection
 
 @section('scripts')
     <script src="{{asset('assets/plugins/bootstrap-select2/select2.min.js')}}"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmuoso1k61TZCOqUdPi3E7VIl2HA2UBmA&libraries=places"></script>
     <script src="{{asset('assets/js/map-icons.js')}}"></script>
+    <script src="{{asset('assets/plugins/alerts/sweet-alert.min.js')}}"></script>
     <script src="{{asset('assets/js/places.js')}}"></script>
 @endsection
 
@@ -178,8 +180,8 @@
                                 </tr>
                                 </thead>
                                 <tr>
-                                    <td><span class="score-speed label label-info">99</span><span> / 100</span></td>
-                                    <td><span class="score-usability label label-info">87</span><span> / 100</span></td>
+                                    <td><span class="score-speed label label-info">0</span><span> / 100</span></td>
+                                    <td><span class="score-usability label label-info">0</span><span> / 100</span></td>
                                 </tr>
                             </table>
                         </div>
@@ -193,32 +195,56 @@
                             <h4>Obsolescence indicators</h4>
                             <table class="table table-condensed">
                                 <thead>
-                                <tr>
-                                    <th>Variable</th>
-                                    <th>Status</th>
-                                </tr>
+                                    <tr>
+                                        <th width="70%">Variable</th>
+                                        <th>&nbsp;</th>
+                                    </tr>
                                 </thead>
-                                <tr class="website">
-                                    <td><strong>Website</strong></td>
-                                    <td><span class="label label-success indicator-website">Yes</span></td>
+                                <tr class="indicator--responsive">
+                                    <td>
+                                        <strong>Responsive</strong>
+                                        <p class="small" style="white-space: normal">Website is adapted for mobile devices</p>
+                                    </td>
+                                    <td class="indicator"></td>
                                 </tr>
-                                <tr class="opening_hours">
-                                    <td><strong>Opening hours</strong></td>
-                                    <td><span class="label label-danger indicator-opening-hours">Not found</span></td>
+                                <tr class="indicator--gzip">
+                                    <td>
+                                        <strong>GZIP</strong>
+                                        <p class="small" style="white-space: normal"></p>
+                                    </td>
+                                    <td class="indicator"></td>
                                 </tr>
-                                <tr class="rating">
-                                    <td><strong>Rating</strong></td>
-                                    <td><span class="label label-info indicator-rating">3 / 5</span></td>
+                                <tr class="indicator--minify-css">
+                                    <td><strong>Minified CSS</strong></td>
+                                    <td class="indicator"></td>
                                 </tr>
-                                <tr class="closed">
-                                    <td><strong>Closed (permanent)</strong></td>
-                                    <td><span class="label label-danger indicator-closed">yes</span></td>
+                                <tr class="indicator--minify-js">
+                                    <td><strong>Minified JS</strong></td>
+                                    <td class="indicator"></td>
                                 </tr>
+                                <tr class="indicator--minify-html">
+                                    <td><strong>Minified HTML</strong></td>
+                                    <td class="indicator"></td>
+                                </tr>
+                                <tr class="indicator--optimized-images">
+                                    <td>
+                                        <strong>Optimized images</strong>
+                                        <p class="small" style="white-space: normal">Images sizes are optimized</p>
+                                    </td>
+                                    <td class="indicator"></td>
+                                </tr>
+                                <tr class="indicator--font-size">
+                                    <td>
+                                        <strong>Adapted font size</strong>
+                                        <p class="small" style="white-space: normal">Font size is optimized for readability</p>
+                                    </td>
+                                    <td class="indicator"></td>
+                                </tr>
+
                             </table>
-                            <hr>
                         </div>
                         <div class="wbf-business-details__add-to-list hidden">
-                            <button class="btn btn-complete btn-lg btn-block btn-add-to-list">Add to my list</button>
+                            <button class="btn btn-complete btn-lg btn-block btn-add-to-list">Save this lead</button>
                         </div>
                     </div>
 

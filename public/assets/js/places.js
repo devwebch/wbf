@@ -14,6 +14,7 @@
     var overlays            = [];
     var infoWindow          = null;
     var place               = {};
+    var indicators          = {};
 
     var request             = {};
 
@@ -24,6 +25,8 @@
     {
         // init the Gmap
         init();
+
+        swal({   title: "Error!",   text: "Here's my error message!",   type: "success",   confirmButtonText: "Cool" });
 
         // setup AJAX requests to send the CSRF token
         $.ajaxSetup({
@@ -43,7 +46,9 @@
             if ( searchCategory ) { request.types = [searchCategory]; } else { request.types = []; }
             if ( searchRadius ) { request.radius = parseInt(searchRadius); } else { request.radius = 100; }
 
-            mapSearch();
+            if (request.query || request.types.length) {
+                mapSearch();
+            }
         });
 
         $('#wbfInputGeolocation').click(function (e) {
@@ -71,6 +76,14 @@
                 data: place,
                 success: function (data) {
                     console.log(data);
+
+                    // success alert
+                    $('body').pgNotification({
+                        message: 'Lead added to your list',
+                        style: 'simple',
+                        type: 'success',
+                        position: 'top-right'
+                    }).show();
                 }
             });
         });
@@ -111,6 +124,7 @@
 
     /**
      * Request the Places API using the request object
+     * Google Places API limit results to 20 establishments
      */
     function mapSearch()
     {
@@ -256,8 +270,6 @@
 
                 var API_URL = API_PAGESPEED + '?url=' + place_website_encoded + '&screenshot=true&strategy=mobile&key=' + API_KEY;
 
-                // TODO: hide & show logic
-
                 // hide results sections
                 $('.wbf-business-details-progress').removeClass('hidden');
                 $('.wbf-business-details').addClass('hidden');
@@ -272,9 +284,9 @@
                 $('.wbf-business-details').removeClass('hidden');
 
                 if (place.website) {
-                    place.score_speed         = '';
-                    place.score_usability     = '';
-                    var screenshot          = '';
+                    place.score_speed           = '';
+                    place.score_usability       = '';
+                    var screenshot              = '';
 
                     // Run PageSpeed analysis
                     $.getJSON(API_URL, function (data) {
@@ -290,6 +302,9 @@
 
                         place.score_screenshot = place.score_screenshot.replace(/_/g, '/');
                         place.score_screenshot = place.score_screenshot.replace(/-/g, '+');
+
+                        analyzeObsolescenceIndicators(data.formattedResults.ruleResults);
+
                     }).complete(function () {
                         // hide progress indicator
                         $('.wbf-business-details-progress').addClass('hidden');
@@ -306,12 +321,6 @@
                             $('.wbf-business-details__preview').removeClass('hidden');
                             $('.wbf-business-details__preview .image').attr('src', 'data:image/jpeg;base64,' + place.score_screenshot);
                         }
-
-                        // details: indicators
-                        $('.wbf-business-details__indicators .indicator-website').html('yes');
-                        $('.wbf-business-details__indicators .indicator-opening-hours').html('found');
-                        $('.wbf-business-details__indicators .indicator-rating').html('5/5');
-                        $('.wbf-business-details__indicators .indicator-closed').html('no');
 
                         $('.wbf-business-details__add-to-list').removeClass('hidden');
                     });
@@ -344,8 +353,44 @@
             }
 
         });
+    }
 
+    /**
+     * Analyze the rules returned by PageSpeed
+     */
+    function analyzeObsolescenceIndicators(results)
+    {
+        indicators.viewport           = results.ConfigureViewport.ruleImpact;
+        indicators.gzip               = results.EnableGzipCompression.ruleImpact;
+        indicators.minifyCss          = results.MinifyCss.ruleImpact;
+        indicators.minifyJs           = results.MinifyJavaScript.ruleImpact;
+        indicators.minifyHTML         = results.MinifyHTML.ruleImpact;
+        indicators.optimizeImages     = results.OptimizeImages.ruleImpact;
+        indicators.fontSize           = results.UseLegibleFontSizes.ruleImpact;
 
+        var indicatorViewport         = $('.indicator--responsive .indicator');
+        var indicatorGzip             = $('.indicator--gzip .indicator');
+        var indicatorMinifyCss        = $('.indicator--minify-css .indicator');
+        var indicatorMinifyJs         = $('.indicator--minify-js .indicator');
+        var indicatorMinifyHTML       = $('.indicator--minify-html .indicator');
+        var indicatorOptimizeImages   = $('.indicator--optimized-images .indicator');
+        var indicatorFontSize         = $('.indicator--font-size .indicator');
+
+        console.log(indicators);
+
+        var labels = {
+          positive: '<span class="label label-success indicator">Yes</span>',
+          negative: '<span class="label label-danger indicator">No</span>'
+        };
+
+        $('.wbf-business-details__indicators').removeClass('hidden');
+        if (indicators.viewport > 0) { indicatorViewport.html(labels.negative); } else { indicatorViewport.html(labels.positive); }
+        if (indicators.gzip > 0) { indicatorGzip.html(labels.negative); } else { indicatorGzip.html(labels.positive); }
+        if (indicators.minifyCss > 0) { indicatorMinifyCss.html(labels.negative); } else { indicatorMinifyCss.html(labels.positive); }
+        if (indicators.minifyJs > 0) { indicatorMinifyJs.html(labels.negative); } else { indicatorMinifyJs.html(labels.positive); }
+        if (indicators.minifyHTML > 0) { indicatorMinifyHTML.html(labels.negative); } else { indicatorMinifyHTML.html(labels.positive); }
+        if (indicators.optimizeImages > 0) { indicatorOptimizeImages.html(labels.negative); } else { indicatorOptimizeImages.html(labels.positive); }
+        if (indicators.fontSize > 0) { indicatorFontSize.html(labels.negative); } else { indicatorFontSize.html(labels.positive); }
     }
 
     /**
