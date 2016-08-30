@@ -162,9 +162,10 @@
                     <div class="wbf-business-details">
                         {{csrf_field()}}
                         <div class="wbf-business-details__title hidden">
-                            <h3 class="title">Titre du site</h3>
-                            <p class="address">Rue du Port-Franc 16, 1003 Lausanne, Suisse</p>
-                            <p><a href="#" class="website hidden" target="_blank">http://www.example.com</a> <i class="fa fa-external-link"></i></p>
+                            <h3 class="title"></h3>
+                            <p class="address"></p>
+                            <p class="phone-number"></p>
+                            <p><a href="#" class="website hidden" target="_blank">http://www.example.com</a></p>
                             <hr>
                         </div>
                         <div class="wbf-business-details__no-website hidden">

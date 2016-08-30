@@ -26,8 +26,6 @@
         // init the Gmap
         init();
 
-        swal({   title: "Error!",   text: "Here's my error message!",   type: "success",   confirmButtonText: "Cool" });
-
         // setup AJAX requests to send the CSRF token
         $.ajaxSetup({
             headers: {
@@ -75,15 +73,8 @@
                 url: '/api/leads/save',
                 data: place,
                 success: function (data) {
-                    console.log(data);
-
                     // success alert
-                    $('body').pgNotification({
-                        message: 'Lead added to your list',
-                        style: 'simple',
-                        type: 'success',
-                        position: 'top-right'
-                    }).show();
+                    swal({ title: "Saved!", text: "The lead was added to your list.", type: "success", timer: 3000 });
                 }
             });
         });
@@ -344,6 +335,7 @@
                 $('.wbf-business-details__title').removeClass('hidden');
                 $('.wbf-business-details__title .title').html(place.name);
                 $('.wbf-business-details__title .address').html(place.formatted_address);
+                $('.wbf-business-details__title .phone-number').html(place.formatted_phone_number);
                 $('.wbf-business-details__title .website').html(place.website);
                 $('.wbf-business-details__title .website').attr('href', place.website);
             }

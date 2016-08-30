@@ -8,12 +8,12 @@
 <div class="page-sidebar" data-pages="sidebar">
     <!-- BEGIN SIDEBAR HEADER -->
     <div class="sidebar-header">
-        <a href="/"><img src="{{asset('assets/img/logo_white.png')}}"
+        <a href="/"><img src="{{asset('assets/img/logo-leadspot-negative.png')}}"
              alt="LeadSpot"
              class="brand"
-             data-src="{{asset('assets/img/logo_white.png')}}"
+             data-src="{{asset('assets/img/logo-leadspot-negative.png')}}"
              data-src-retina="{{asset('assets/img/logo_white2x.png')}}"
-             width="78" height="22"></a>
+             width="120"></a>
     </div>
     <!-- END SIDEBAR HEADER -->
     <!-- BEGIN SIDEBAR MENU -->
@@ -64,9 +64,9 @@
             <div class="pull-center hidden-md hidden-lg">
                 <div class="header-inner">
                     <div class="brand inline">
-                        <a href="/"><img src="{{asset('assets/img/logo.png')}}" 
+                        <a href="/"><img src="{{asset('assets/img/logo-leadspot.png')}}" 
                              alt="LeadSpot" 
-                             data-src="{{asset('assets/img/logo.png')}}" 
+                             data-src="{{asset('assets/img/logo-leadspot.png')}}" 
                              data-src-retina="{{asset('assets/img/logo_2x.png')}}" 
                              width="78" height="22"></a>
                     </div>
@@ -87,8 +87,8 @@
         <div class=" pull-left sm-table hidden-xs hidden-sm">
             <div class="header-inner">
                 <div class="brand inline">
-                    <img src="{{asset('assets/img/logo.png')}}"
-                         alt="LeadSpot" data-src="{{asset('assets/img/logo.png')}}" data-src-retina="{{asset('assets/img/logo_2x.png')}}" width="78" height="22">
+                    <img src="{{asset('assets/img/logo-leadspot.png')}}"
+                         alt="LeadSpot" data-src="{{asset('assets/img/logo-leadspot.png')}}" data-src-retina="{{asset('assets/img/logo_2x.png')}}" width="120">
                 </div>
                 <!-- START NOTIFICATION LIST -->
                 <ul class="notification-list no-margin hidden-sm hidden-xs b-grey b-l b-r no-style p-l-30 p-r-20">
@@ -283,7 +283,7 @@
         <!-- BEGIN Overlay Header !-->
         <div class="container-fluid">
             <!-- BEGIN Overlay Logo !-->
-            <img class="overlay-brand" src="{{asset('assets/img/logo.png')}}" alt="logo" data-src="{{asset('assets/img/logo.png')}}" data-src-retina="{{asset('assets/img/logo_2x.png')}}" width="78" height="22">
+            <img class="overlay-brand" src="{{asset('assets/img/logo-leadspot.png')}}" alt="logo" data-src="{{asset('assets/img/logo-leadspot.png')}}" data-src-retina="{{asset('assets/img/logo_2x.png')}}" width="78" height="22">
             <!-- END Overlay Logo !-->
             <!-- BEGIN Overlay Close !-->
             <a href="#" class="close-icon-light overlay-close text-black fs-16">

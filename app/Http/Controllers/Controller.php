@@ -36,6 +36,7 @@ class Controller extends BaseController
 
         $leads  = Lead::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
+            ->take(6)
             ->get();
 
         return view('home', [

@@ -22,7 +22,6 @@
                 <div class="padding-25">
                     <div class="pull-left">
                         <h2 class="no-margin">Your leads</h2>
-                        <p class="no-margin">Today's sales</p>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -46,7 +45,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="ar-1-1">
+            <div class="ar-2-1">
                 <div class="widget-2 panel no-border bg-success widget no-margin">
                     <div class="panel-body">
                         <div class="pull-bottom bottom-left bottom-right padding-25">
