@@ -2,9 +2,9 @@
 <meta charset="utf-8" />
 <title>
     @if(View::hasSection('title'))
-        @yield('title') - Web Business Finder
+        @yield('title') - LeadSpot
     @else
-        Web Business Finder
+        LeadSpot - Local Business Analyzer
     @endif
 </title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -23,7 +23,6 @@
 <link href="{{asset('assets/plugins/font-awesome/css/font-awesome.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{asset('assets/plugins/jquery-scrollbar/jquery.scrollbar.css')}}" rel="stylesheet" type="text/css" media="screen" />
 <link href="{{asset('assets/plugins/bootstrap-select2/select2.css')}}" rel="stylesheet" type="text/css" media="screen" />
-<link href="{{asset('assets/plugins/switchery/css/switchery.min.css')}}" rel="stylesheet" type="text/css" media="screen" />
 @yield('styles')
 <!-- BEGIN Pages CSS-->
 <link href="{{asset('pages/css/pages-icons.css')}}" rel="stylesheet" type="text/css">

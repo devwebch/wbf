@@ -24,7 +24,7 @@
     <!-- START Login Right Container-->
     <div class="login-container bg-white">
         <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
-            <img src="assets/img/logo.png" alt="logo" data-src="assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
+            <img src="{{asset('assets/img/logo-leadspot.png')}}" alt="logo" data-src="{{asset('assets/img/logo-leadspot.png')}}" data-src-retina="{{asset('assets/img/logo-leadspot.png')}}" width="200">
             <p class="p-t-10">Sign into your LeadSpot account</p>
             <!-- START Login Form -->
             @yield('content')
